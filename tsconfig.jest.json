@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig",
+    "compilerOptions": {
+    "module": "commonjs",
+    "baseUrl": "src",
+    "paths": {
+      "test-utils": ["./utils/test-utils"]
+    }
+  }
+}

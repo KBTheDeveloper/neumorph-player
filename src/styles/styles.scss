@@ -1,0 +1,63 @@
+@import "./general/variables";
+@import "./general/flex";
+@import "./general/typography";
+@import "./general/mixins";
+
+body, html {
+  font-family: 'Hind Siliguri', sans-serif;
+  font-display: fallback;
+  padding: 0;
+  margin: 0;
+}
+div {
+  box-sizing: border-box;
+}
+.container {
+  &-fluid {
+    display: flex;
+    flex-flow: wrap column;
+  }
+}
+.main {
+  display: flex;
+  flex-flow: column wrap;
+  min-height: 100vh;
+  @include neuMorphGradient($colors:('first': #23232b, 'second': #282739));
+}
+// .btn {
+//   border: 1px solid transparent;
+//   background-color: transparent;
+//   padding: 0;
+// }
+.container {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  position: relative;
+  padding-right: 15px;
+  padding-left: 15px;
+}
+$default-grid-gutter: 2%;
+// .grid {
+//   @include grid($gutter: $default-grid-gutter);
+//   flex-wrap: wrap;
+//   @for $i from 1 through 12 {
+//     .grid__col-#{$i} {
+//       @include grid-col($col: $i, $gutter: $default-grid-gutter);
+//     }
+//   }
+// }
+
+// .grid {
+//   @include grid($gutter: $default-grid-gutter);
+//   @for $i from 1 through 12 {
+//     @each $name, $value in $breakpoints {
+//       @media#{$value} {
+//         .grid__col_#{$name}-#{$i} {
+//           @include grid-col($col: $i, $gutter: $default-grid-gutter);
+//         }
+//       }
+//     }
+//   }
+// }
+

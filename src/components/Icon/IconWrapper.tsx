@@ -1,0 +1,42 @@
+import React from "react";
+import styled from "styled-components";
+import { Icon } from "./Icon";
+import { iconWrapperProps } from "./types";
+
+const IconWrapperSC = styled.div(props => ({
+  display: "flex",
+  flexFlow: "row wrap",
+  alignItems: "center",
+  justifyContent: "center",
+  borderRadius: "50%",
+  width: props.width || 40,
+  height: props.height || 40,
+  ...props.onClick && { cursor: "pointer" },
+  ...props.customStyle,
+}));
+
+export const IconWrapper: React.FunctionComponent<iconWrapperProps> = (props: iconWrapperProps) => {
+  const customStyles = props.styles?.name || "";
+  const height = props.sizes?.height ?? "25";
+  const width = props.sizes?.width ?? "25";
+  const vb = props.sizes?.viewBox ?? null;
+  const icon = props.icon ? <Icon width={width} height={height} color={props.color} icon={props.icon} iconName={null} /> :
+    <Icon width={width} viewBox={vb} height={height} color={props.color} noAlign={props.noAlign} iconName={props.iconName} />;
+  const classes = props.classes || "";
+  return (
+    <React.Fragment>
+      <IconWrapperSC
+        title={props.title}
+        role={props.role}
+        tabIndex={props.tabIndex}
+        onClick={props.onClick}
+        customStyle={props.styles}
+        width={props.sizes?.width}
+        height={props.sizes?.height}
+        className={`${classes} ${customStyles}`}
+        onKeyPress={props.onKeyPress}>
+        {icon}
+      </IconWrapperSC>
+    </React.Fragment>
+  );
+}

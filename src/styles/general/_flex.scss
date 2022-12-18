@@ -1,0 +1,225 @@
+// @import '../tools/functions';
+
+// $utilities: () !default;
+// $utilities: map-deep-merge(("flex-direction": (responsive: true, property: flex-direction, class: flex, values: row column row-reverse column-reverse), "flex-grow": (responsive: true, property: flex-grow, class: flex, values: (grow-0: 0, grow-1: 1)), "flex-shrink": (responsive: true, property: flex-shrink, class: flex, values: (shrink-0: 0, shrink-1: 1)), "flex-wrap": (responsive: true, property: flex-wrap, class: flex, values: wrap nowrap wrap-reverse), "order": (responsive: true, property: order, values: (first: -1, 0: 0, 1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7, 8: 8, 9: 9, 10: 10, 11: 11, 12: 12, last: 13))), $utilities);
+.d-flex {
+  display: flex;
+  flex-flow: row wrap;
+}
+$count: 3;
+@while $count >= 0 {
+  .flex-grow-#{$count} {
+    flex-grow: $count;
+  }
+  $count: $count - 1;
+}
+
+.flex-column {
+  flex-flow: column wrap !important;
+
+  @each $name,
+  $value in $breakpoints {
+    @media #{$value} {
+      &-#{$name} {
+        flex-flow: column wrap !important;
+      }
+    }
+  }
+}
+
+
+.text {
+  &-center {
+    text-align: center;
+  }
+
+  &-left {
+    text-align: left;
+  }
+
+  &-right {
+    text-align: right;
+  }
+}
+
+.align-items {
+  &--start {
+    align-items: flex-start;
+  }
+
+  &--center {
+    align-items: center;
+  }
+
+  &--end {
+    align-items: flex-end;
+  }
+
+  &--stretch {
+    align-items: stretch;
+  }
+}
+
+.align-self {
+  &--center {
+    align-self: center;
+  }
+
+  &--end {
+    align-self: flex-end;
+  }
+}
+
+.justify {
+  &-center {
+    justify-content: center;
+  }
+
+  &-start {
+    justify-content: flex-start;
+  }
+
+  &-end {
+    justify-content: flex-end;
+  }
+
+  &-between {
+    justify-content: space-between;
+  }
+
+  &-around {
+    justify-content: space-around;
+  }
+
+  &-evenly {
+    justify-content: space-evenly;
+  }
+}
+
+@each $name,
+$value,
+$i in $breakpoints {
+  .justify {
+    @media #{$value} {
+      &-#{$name} {
+        &-center {
+          justify-content: center !important;
+        }
+
+        &-start {
+          justify-content: flex-start !important;
+        }
+
+        &-end {
+          justify-content: flex-end !important;
+        }
+
+        &-between {
+          justify-content: space-between !important;
+        }
+
+        &-around {
+          justify-content: space-around !important;
+        }
+
+        &-evenly {
+          justify-content: space-evenly !important;
+        }
+      }
+    }
+  }
+
+  .align {
+    &-items {
+      @media #{$value} {
+        &-#{$name} {
+          &--center {
+            align-items: center;
+          }
+
+          &--end {
+            align-items: flex-end;
+          }
+
+          &--start {
+            align-items: flex-start;
+          }
+
+          &--stretch {
+            align-items: stretch;
+          }
+        }
+      }
+    }
+  }
+
+  .order {
+    @media #{$value} {
+      &-#{$name} {
+        @for $i from 1 through (10) {
+          &-#{$i} {
+            order: #{$i};
+          }
+        }
+      }
+    }
+  }
+}
+
+@each $name,
+$value in $breakpoints {
+  .align {
+    &-self {
+      @media #{$value} {
+        &-#{$name} {
+          &--center {
+            align-self: center;
+          }
+
+          &--end {
+            align-self: flex-end;
+          }
+
+          &--start {
+            align-self: flex-start;
+          }
+
+          &--stretch {
+            align-self: stretch;
+          }
+        }
+      }
+    }
+  }
+}
+
+.align {
+  &-self {
+
+    &--center {
+      align-self: center;
+    }
+
+    &--end {
+      align-self: flex-end;
+    }
+
+    &--start {
+      align-self: flex-start;
+    }
+
+    &--stretch {
+      align-self: stretch;
+    }
+  }
+}
+
+.order {
+  &-first {
+    order: 1;
+  }
+
+  &-last {
+    order: -1;
+  }
+}

@@ -1,0 +1,13 @@
+$dark-grey: #181A1D;
+$dark-purple: #1E1D2B;
+$dark-purple-2: #212433;
+$orange: #DB4D0A;
+
+$margins: ('mt': 'margin-top', 'mb': 'margin-bottom', 'mr': 'margin-right', 'ml': 'margin-left', 'ma': 'margin');
+$breakpoints: (
+        "xs": '(max-width: 576px)',
+        "sm": '(min-width: 576px) and (max-width: 767.98px)',
+        "md": '(min-width: 768px) and (max-width: 1199.98px)',
+        "lg": '(min-width: 1200px) and (max-width: 1399.98px)',
+        "xl": '(min-width: 1400px)',
+);
