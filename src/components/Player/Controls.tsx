@@ -4,7 +4,6 @@ import { buttonStyles } from "./styles/themes";
 import { ControlsProps } from "./types";
 
 export const Controls: FunctionComponent<ControlsProps> = (props: ControlsProps) => {
-
   const onPlay = (id) => {
     props.onPlay(true, id);
   };

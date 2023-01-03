@@ -6,8 +6,8 @@ import { volumeStyles } from "../Player/styles/themes";
 import { SliderProps } from "./types";
 
 const thumbSizes = {
-  width: 25,
-  height: 25,
+  width: 20,
+  height: 20,
 };
 
 const RangeSliderSC = styled.div(props => ({
@@ -47,13 +47,23 @@ const RangeSliderSC = styled.div(props => ({
     bottom: 0,
     height: "100%",
     width: "100%",
-    borderRadius: 4,
+    borderRadius: 3,
   },
   ".range-slider__base": {
     width: "100%",
     height: "100%",
     position: "relative",
     zIndex: 1,
+    "&:after": {
+      content: "''",
+      position: "absolute",
+      width: "100%",
+      height: "100%",
+      top: 0,
+      left: "50%",
+      padding: "0 15px",
+      transform: "translateX(-50%)"
+    }
   },
   ".range-slider__origin": {
     zIndex: 1,
@@ -187,7 +197,7 @@ const RangeSlider: React.FunctionComponent<SliderProps> = React.memo((props: Sli
         : percent;
     setValue(per);
   }, [percent]);
-  React.useEffect(() => {setValue(props.start * 100)}, [props.start]);
+  React.useEffect(() => { setValue(props.start * 100) }, [props.start]);
   const position = props.view === "round-horizontal"
     ? { transform: `translate(${thumbPosition}%, 0` }
     : { transform: `translate(0, ${thumbPosition}%)` };

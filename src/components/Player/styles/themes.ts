@@ -59,8 +59,8 @@ const genButtonStyles = ({ defaultButton, playButton, shadow }
   });
 const buttonShadows = {
   dark: "inset 1px 2px 1px rgba(255, 255, 255, 0.06), "
-  + "inset -10px -10px 52px rgba(49, 48, 65, 0.25),"
-  + " 2px 2px 3px rgba(0, 0, 0, 0.4), -2px -2px 3px rgba(67, 67, 70, 0.4)",
+    + "inset -10px -10px 52px rgba(49, 48, 65, 0.25),"
+    + " 2px 2px 3px rgba(0, 0, 0, 0.4), -2px -2px 3px rgba(67, 67, 70, 0.4)",
   light: "inset 1px 2px 1px rgba(255, 255, 255, 0.06), "
     + "inset -10px -10px 52px rgba(49, 48, 65, 0.25),"
     + " 2px 2px 3px rgba(174, 174, 192, 0.4), -2px -2px 3px #FFFFFF",
@@ -160,17 +160,21 @@ const playlistGeneralStyles = {
     padding: "40px 0 0 0"
   },
 }
-const TrackStyles = ({ color, bgColor, iconColor }) => ({
+const TrackStyles = ({ color, bgColor, iconColor, shadow }) => ({
   "& .playlist__item": {
     fontSize: 16,
     lineHeight: 1.4,
     fontWeight: 400,
+    background: bgColor,
+    boxShadow: shadow.default,
+    transition: "all .2s ease-in-out",
     "&-title, &-artist-name": {
       color,
     },
     "&:hover": {
       background: bgColor,
-      cursor: "pointer"
+      cursor: "pointer",
+      boxShadow: shadow.hover,
     },
     "svg": {
       "rect": {
@@ -192,6 +196,10 @@ const playlistStyles = {
       iconColor: {
         rectangle: appPalette.violet,
         path: appPalette.white
+      },
+      shadow: {
+        default: "-4px -4px 8px rgba(255, 255, 255, 0.03), 4px 4px 8px rgba(0, 0, 0, 0.25)",
+        hover: "-6px -6px 8px rgba(255, 255, 255, 0.03), 6px 6px 8px rgba(0, 0, 0, 0.25)"
       }
     }),
   },
@@ -207,7 +215,8 @@ const playlistStyles = {
       iconColor: {
         rectangle: appPalette.light.text,
         path: appPalette.white
-      }
+      },
+      shadow: { default: "", hover: "" }
     }),
   },
   "dark-red": {
@@ -219,7 +228,8 @@ const playlistStyles = {
       iconColor: {
         rectangle: appPalette.vinous.main,
         path: appPalette.white
-      }
+      },
+      shadow: ""
     }),
   },
   blue: {
@@ -227,10 +237,14 @@ const playlistStyles = {
     background: appPalette.blue.main,
     ...TrackStyles({
       color: appPalette.white,
-      bgColor: appPalette.blue.main,
+      bgColor: appPalette.blue.trackGradient,
       iconColor: {
         rectangle: appPalette.blue.main,
         path: appPalette.white
+      },
+      shadow: {
+        default: "1.5px 1.5px 3px #242E9B, -1px -1px 3px rgba(107, 96, 255, 0.25)",
+        hover: " 3px 3px 3px #242E9B, -3px -3px 3px rgba(107, 96, 255, 0.25)"
       }
     }),
   },
@@ -242,3 +256,5 @@ export {
   volumeStyles,
   playlistStyles,
 }
+
+

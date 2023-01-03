@@ -6,6 +6,7 @@ import { mixins } from "../../styles/jss/mixins";
 import styled from "styled-components";
 import { TrackItem } from "./types";
 import { buttonStyles } from "./styles/themes";
+
 const TrackSC = styled.li.attrs(props => ({
   draggable: true}))`
   &button {
@@ -26,7 +27,6 @@ const TrackSC = styled.li.attrs(props => ({
     top: 10px;
   }
   &.playlist__item {
-    ${mixins.neuMorphismShadowSC("inset 1px 1px 0.5px rgba(255, 255, 255, 0.06)", "inset -10px -10px 52px rgba(49, 48, 65, 0.25)")};
     border-radius: 4px;
     margin-bottom: 10px;
     cursor: pointer;

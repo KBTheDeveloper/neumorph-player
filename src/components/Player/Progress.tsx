@@ -49,7 +49,7 @@ export const Progress: React.FunctionComponent<IProgress> = memo((props: IProgre
     text: "",
     position: { x: 0, y: 0 }
   });
-  const trackIsMounted = props.track.source.howl && true;
+  const trackIsMounted = props.track.source?.howl && true;
 
   const showTime = (per: number) => {
 
@@ -82,11 +82,11 @@ export const Progress: React.FunctionComponent<IProgress> = memo((props: IProgre
     setTooltip(state => ({ ...state, show: true }));
   };
   const onMouseOut = () => {
-    if (!props.track.source.howl) return;
+    if (!props.track.source?.howl) return;
     setTooltip(state => ({ ...state, show: false }));
   };
   useEffect(() => {
-    if (props.track.source.howl) requestAnimationFrameId = requestAnimationFrame(step.bind(null, sound, lineRef?.current));
+    if (props.track.source?.howl) requestAnimationFrameId = requestAnimationFrame(step.bind(null, sound, lineRef?.current));
     return function cleanup() {
       window.cancelAnimationFrame(requestAnimationFrameId);
     }

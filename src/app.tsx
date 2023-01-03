@@ -1,11 +1,12 @@
 import { hot } from "react-hot-loader";
 import React, { Suspense } from 'react';
 import Ripple from './components/Ripple';
+import { TrackType } from "./components/Player/types";
 const Player = React.lazy(() => import("./components/Player/Player"));
 customElements.define("ripple-element", Ripple);
 
 export const App: React.FunctionComponent = (props: any) => {
-  const tracks = [
+  const tracks: Array<TrackType> = [
     {
       title: "Demo Song 1",
       artist: "Chronoks",
@@ -33,7 +34,7 @@ export const App: React.FunctionComponent = (props: any) => {
   ];
 
   const player = tracks.length > 0 ?
-    <Player theme="light" tracks={tracks} /> : null;
+    <Player tracks={tracks} theme="dark" /> : null;
   return (
     <main className="main">
       <div className="container">

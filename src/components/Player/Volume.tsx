@@ -1,5 +1,4 @@
 import React from "react";
-import { mdiVolumeHigh, mdiVolumeMedium, mdiVolumeMute } from "@mdi/js";
 import RangeSlider from "../volumeSlider";
 import styled from 'styled-components';
 import { buttonStyles, volumeStyles } from "./styles/themes";
@@ -51,8 +50,8 @@ const VolumeSC = styled.button(props => ({
   },
   ".volume": {
     borderRadius: 5,
-    width: 50,
-    height: 300,
+    width: 40,
+    height: 250,
     transform: "translateX(-50%)",
     position: "absolute",
     bottom: -500,
@@ -178,7 +177,7 @@ export const Volume: React.FunctionComponent<VolumeProps> = React.memo((props: V
           color="orange"
           orientation="vertical"
           onChange={onVolumeChange}
-          sizes={{ width: 15 }}
+          sizes={{ width: 10 }}
           start={getVolume()}
           min={0}
           max={100} />

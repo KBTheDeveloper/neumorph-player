@@ -45,6 +45,7 @@ export const appPalette: any = {
 		lightBlueSkeletonGradient: "linear-gradient(110deg, #3944BC 14.67%, #7785C5 86.46%, #7785DD 10%)",
 		lightBlueRadialGradient: "radial-gradient(#7785C5, #3944BC)",
 		lightBlueGradientRev: "linear-gradient(330.16deg, #7785C5 86.46%, #3944BC 14.67%)",
+		trackGradient: "linear-gradient(89.64deg, #78EFFF -10.21%, #3944BC 55.36%, #3944BC 62.83%, #3944BC 95.57%)",
 		blueSkyGradient: "linear-gradient(337.66deg, #3843B9 12.49%, #26A7C5 88.08%)",
 		blueSkyGradientRev: "linear-gradient(337.66deg, #2679C5 88.08%, #3843B9 12.49%)"
 	}

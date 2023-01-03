@@ -56,7 +56,7 @@ const stylesInst = {
   },
   [`@media${breakpoints.xs}`]: {
     ".player": {
-      height: 190
+      height: 145
     }
   },
   ".volumeSlider": {

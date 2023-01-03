@@ -19,13 +19,14 @@ const scrollBarStyles: ScrollStyleType = {
     borderRadius: 4,
     background: appPalette.white
   }
-}
+} 
 const PlaylistContainer = styled.div({
   paddingTop: 10,
   maxHeight: "600px",
   height: "100%",
   overflowY: "auto",
   paddingRight: 10,
+  paddingLeft: 10,
   ...scrollBarStyle(scrollBarStyles)
 });
 

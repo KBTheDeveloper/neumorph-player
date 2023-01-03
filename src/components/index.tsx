@@ -1,5 +1,5 @@
 export * from "./Player/Player";
-export * from "./Player";
+export * from "./Player/components";
 export * from './Icon/IconWrapper';
 export * from './Icon/Icon';
 export * from "./volumeSlider";

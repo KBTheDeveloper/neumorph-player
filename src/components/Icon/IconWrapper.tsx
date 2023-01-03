@@ -15,7 +15,7 @@ const IconWrapperSC = styled.div(props => ({
   ...props.customStyle,
 }));
 
-export const IconWrapper: React.FunctionComponent<iconWrapperProps> = (props: iconWrapperProps) => {
+export const IconWrapper: React.FunctionComponent<iconWrapperProps> = function(props: iconWrapperProps) {
   const customStyles = props.styles?.name || "";
   const height = props.sizes?.height ?? "25";
   const width = props.sizes?.width ?? "25";

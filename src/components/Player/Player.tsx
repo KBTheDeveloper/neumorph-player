@@ -8,7 +8,6 @@ import styled from "styled-components";
 import { buttonStyles, playerStyles as playerThemes } from "./styles/themes";
 import { PlayerProps, TPlayerState } from "./types";
 const Playlist = lazy(() => import("./Playlist"));
-import { PlayerProvider } from "./context/player.context";
 const PlayerWrapperSC = styled.div(props => ({
   position: props.position,
   ...playerStyles
@@ -42,17 +41,16 @@ const updatedTracks = (array, index, howl) => {
 };
 
 const Player: React.FunctionComponent<PlayerProps> = React.memo((props: PlayerProps) => {
-  const defaultProps = {
-    playTime: "0:00",
-    index: 0,
-    percent: 0,
-    loading: false,
-    duration: "0:00",
-    play: false,
-    source: props.tracks[0]
-  };
   const [playerState, setPlayerState] = useState<TPlayerState>({
-    track: defaultProps,
+    track: {
+      playTime: "0:00",
+      index: 0,
+      percent: 0,
+      loading: false,
+      duration: "0:00",
+      play: false,
+      source: props.tracks[0]
+    },
     tracks: props.tracks,
     playlist: false,
     settings: defaultSettings
@@ -67,67 +65,40 @@ const Player: React.FunctionComponent<PlayerProps> = React.memo((props: PlayerPr
     Howler.volume(Number(defaultSettings.volume));
   }
 
-  const skipDirections = {
-    prev: (index: number) => {
-      let i = index - 1;
-      return i < 0 ? tracks.length - 1 : i;
-    },
-    next: (index: number) => {
-      return index + 1 > tracks.length - 1 ?
-        0 : index + 1;
-    }
-  }
-  const playerMethods = () => {
-    return {
-      onplay: function () {
-        // dispatch({...state, currentTrack: {...state.track, duration: formatTime(Math.round(this?.duration()))}}, "SET_CURRENT_TRACK");
-        setPlayerState(state => ({
-          ...state,
-          track: {
-            ...state.track,
-            duration: formatTime(Math.round(this?.duration()))
-          }
-        }));
-        // Display the duration.
-        // Start updating the progress of the track.
-      },
+  function createAudioTrack(track) {
+    const howl = new Howl({
+      src: [`/src/assets/audio/${track.filename}`],
+      html5: true, // Force to HTML5 so that the audio can stream in (best for large files).
       onload: function () {
+        console.log(track)
         setPlayerState(state => ({
           ...state,
           track: {
             ...state.track,
-            loading: false,
-            duration: formatTime(Math.round(this.duration()))
+            source: track,
+            // loading: sound.howl?.state() === 'loaded' ? false : true,
+            duration: formatTime(Math.round(track.howl.duration()))
           }
         }));
       },
       onend: function () {
-        skip('next');
+        if(track.id < tracks.length) skip('next');
       }
-    }
-  };
-
-  const createAudioTrack = (track) => {
-    const howl = new Howl({
-      src: [`/src/assets/audio/${track.filename}`],
-      html5: true, // Force to HTML5 so that the audio can stream in (best for large files).
-      ...playerMethods(),
     });
     return howl;
   }
 
-  const skip = (direction: string) => {
+  function skip(direction: string) {
+    const index:number =  direction === "next" ? (track.index + 1 > tracks.length - 1 ?
+      0 : track.index + 1) : (track.index - 1 < 0 ? tracks.length - 1 : track.index - 1);
     /**
     * Skip to the next or previous track.
     * @param  {String} direction 'next' or 'prev'.
     */
     // Get the next track based on the direction of the track.
-    let index = 0;
     if (track.source.howl) track.source.howl.stop();
     const clearedTracks = resetHowls(tracks);
-    index = skipDirections[direction](track.index);
     const newTrack = createAudioTrack(clearedTracks[index]);
-
     newTrack.play();
     setPlayerState(state => ({
       ...state,
@@ -136,14 +107,14 @@ const Player: React.FunctionComponent<PlayerProps> = React.memo((props: PlayerPr
       ],
       track: {
         ...state.track,
-        source: {
-          ...clearedTracks[index],
-          howl: newTrack
-        },
         time: 0,
         play: true,
         percent: 0,
-        index
+        index,
+        source: {
+          ...clearedTracks[index],
+          howl: newTrack
+        }
       }
     }));
   };
@@ -151,7 +122,7 @@ const Player: React.FunctionComponent<PlayerProps> = React.memo((props: PlayerPr
   function play(value, id) {
     let tracksArr = tracks;
     const playingTrack = getPlayingTrack(tracks);
-    if(playingTrack?.id !== id) {
+    if (playingTrack?.id !== id) {
       playingTrack?.howl?.stop();
       tracksArr = resetHowls(tracks);
     };
@@ -169,7 +140,8 @@ const Player: React.FunctionComponent<PlayerProps> = React.memo((props: PlayerPr
         ...state.track,
         play: value,
         // loading: sound.howl?.state() === 'loaded' ? false : true,
-        source: sound
+        source: sound,
+        duration: formatTime(Math.round(sound.howl.duration()))
       }
     }));
     // Begin playing the sound.
@@ -220,6 +192,7 @@ const Player: React.FunctionComponent<PlayerProps> = React.memo((props: PlayerPr
   };
 
   useEffect((): void => init(), [0]);
+  // useEffect(() => console.log(track), [playerState]);
   useEffect(() => {
     return function cleanup() { destroy() }
   }, []);
@@ -232,8 +205,7 @@ const Player: React.FunctionComponent<PlayerProps> = React.memo((props: PlayerPr
     ...buttonStyles[props.theme].defaultButton
   };
   return (
-    <PlayerProvider>
-      <PlayerWrapperSC position={position} className="playerWrapper">
+    <PlayerWrapperSC position={position} className="playerWrapper">
       <div className="container">
         <div className="grid">
           <div className="grid__col-12 mb-0">
@@ -297,8 +269,7 @@ const Player: React.FunctionComponent<PlayerProps> = React.memo((props: PlayerPr
           </div>
         </div>
       </div>
-      </PlayerWrapperSC>
-    </PlayerProvider>
+    </PlayerWrapperSC>
   );
 });
 

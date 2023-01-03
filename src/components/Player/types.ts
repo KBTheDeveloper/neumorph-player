@@ -68,11 +68,6 @@ export type TCurrentTrack = {
   source: TrackType
 }
 
-export type TState= {
-  tracks: TrackType[];
-  currentTrack: TCurrentTrack
-}
-
 export type ControlsProps = IPlayerMethods & {
   loading: boolean,
   items: any[],
