@@ -58,6 +58,9 @@ React.memo((props: PlayerProps) => {
     settings: defaultSettings
   });
   const { track, tracks, playlist, settings } = playerState;
+  /** 
+   ** TODO: update state fix - https://stackoverflow.com/questions/56108962/usestate-always-is-default-value-in-itself
+   * */
   const setState = useCallback((newValue) => setPlayerState({...playerState, ...newValue}), [playerState]);
 
   /**
