@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useState } from "react";
+import React, { Suspense, useCallback, useEffect, useState } from "react";
 import { Howl, Howler } from 'howler';
 import { TrackInfo, Controls, Progress, Volume } from "./components";
 import { IconWrapper } from "../Icon/IconWrapper";
@@ -57,8 +57,9 @@ React.memo((props: PlayerProps) => {
     playlist: false,
     settings: defaultSettings
   });
-  const [currentTrack, setCurrentTrack] = useState(0);
   const { track, tracks, playlist, settings } = playerState;
+  const setState = useCallback((newValue) => setPlayerState({...playerState, ...newValue}), [playerState]);
+
   /**
 * Player class containing the state of our tracks and where we are in it.
 * Includes all methods for playing, skipping, updating the display, etc.
@@ -73,15 +74,14 @@ React.memo((props: PlayerProps) => {
       src: [`/src/assets/audio/${track.filename}`],
       html5: true, // Force to HTML5 so that the audio can stream in (best for large files).
       onload: function () {
-        setPlayerState(state => ({
-          ...state,
+        setState({
           track: {
-            ...state.track,
+            ...playerState.track,
             source: track,
             // loading: sound.howl?.state() === 'loaded' ? false : true,
             duration: formatTime(Math.round(track.howl.duration()))
           }
-        }));
+        });
       },
       onend: function () {
         if (track.id < tracks.length) skip('next');
@@ -92,10 +92,8 @@ React.memo((props: PlayerProps) => {
   }
 
   const skip = (direction: string) => {
-    const index = direction === "next" ? (currentTrack + 1 > tracks.length - 1 ?
-      0 : currentTrack + 1) : (currentTrack - 1 < 0 ? tracks.length - 1 : currentTrack - 1);
-    // const index: number = direction === "next" ? (track.index + 1 > tracks.length - 1 ?
-    //   0 : track.index + 1) : (track.index - 1 < 0 ? tracks.length - 1 : track.index - 1);
+    const index = direction === "next" ? (track.index + 1 > tracks.length - 1 ?
+      0 : track.index + 1) : (track.index - 1 < 0 ? tracks.length - 1 : track.index - 1);
     /**
     * Skip to the next or previous track.
     * @param  {String} direction 'next' or 'prev'.
@@ -105,14 +103,13 @@ React.memo((props: PlayerProps) => {
     const clearedTracks = resetHowls(tracks);
     const newTrack = createAudioTrack(clearedTracks[index]);
     newTrack.play();
-    setCurrentTrack(index);
-    setPlayerState(state => ({
-      ...state,
+    setState({
+      ...playerState,
       tracks: [
         ...updatedTracks(clearedTracks, index, newTrack)
       ],
       track: {
-        ...state.track,
+        ...playerState.track,
         time: 0,
         play: true,
         percent: 0,
@@ -122,7 +119,7 @@ React.memo((props: PlayerProps) => {
           howl: newTrack
         }
       }
-    }));
+    });
   };
 
   function play(value, id) {
@@ -173,17 +170,17 @@ React.memo((props: PlayerProps) => {
   const stop = () => {
     const { howl } = getPlayingTrack(tracks);
     howl.stop();
-    setPlayerState(state => ({
-      ...state,
+    setState({
+      ...playerState,
       track: {
-        ...state.track,
+        ...playerState.track,
         source: {
-          ...state.track.source,
+          ...playerState.track.source,
           howl: null,
         },
         play: false
       }
-    }));
+    });
   }
   const onTrackChange = (value, id) => {
     if (value) play(value, id || null);
