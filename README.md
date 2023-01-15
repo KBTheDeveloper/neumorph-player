@@ -28,6 +28,9 @@ Set the player position
 ### Theme `String` `"dark"`
 There are 3 themes out of the box: dark, light, and blue
 
+## Note
+This package contains 3 audio tracks for testing player in demo mode
+
 
 
 
