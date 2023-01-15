@@ -1,10 +1,10 @@
-import React, { memo, useEffect, useRef, useState } from "react";
-import { appPalette } from "../../utils/guides";
+import React, { memo, useEffect, useRef, useState, useCallback } from "react";
 import { formatTime } from "../../utils/helpers";
 import { Tooltip } from "..";
 import styled from 'styled-components';
 import { IProgress } from "./types";
 import { progressStyles } from "./styles/themes";
+import { Howl } from "howler";
 
 
 const ProgressSC = styled.div(props => ({
@@ -40,6 +40,7 @@ const step = function (context, element) {
   element.style.width = `${value}%`;
   requestAnimationFrameId = requestAnimationFrame(step.bind(null, context, element));
 };
+let trackIsMounted: null | Howl;
 export const Progress: React.FunctionComponent<IProgress> = memo((props: IProgress) => {
   const progress = useRef<HTMLDivElement>(null);
   const lineRef = useRef<SVGRectElement | null>(null);
@@ -49,10 +50,8 @@ export const Progress: React.FunctionComponent<IProgress> = memo((props: IProgre
     text: "",
     position: { x: 0, y: 0 }
   });
-  const trackIsMounted = props.track.source?.howl && true;
 
   const showTime = (per: number) => {
-
     // Convert the percent into a seek position.
     if (sound) {
       return formatTime(sound.duration() * per).replace(/\.\d+/, "");
@@ -62,13 +61,14 @@ export const Progress: React.FunctionComponent<IProgress> = memo((props: IProgre
 * Seek to a new position in the currently playing track.
 * @param  {Number} per Percentage through the song to skip.
 */
-  const seek = (event) => {
+  const seek = useCallback(function(event) {
     if (!trackIsMounted) return;
     const { x } = progress.current.getBoundingClientRect();
     const per = (event.clientX - x) / progress.current.offsetWidth;
     sound.seek(sound.duration() * per);
-  };
-  const onMouseMove = (event) => {
+  }, [sound]);
+  const onMouseMove = useCallback((event) => {
+    trackIsMounted = props.track.source.howl;
     if (!trackIsMounted) return;
     const { x, y } = progress.current.getBoundingClientRect();
     setTooltip(state => ({
@@ -76,21 +76,21 @@ export const Progress: React.FunctionComponent<IProgress> = memo((props: IProgre
       position: { y: tooltip.position.y === 0 ? y - 50 : tooltip.position.y, x: event.clientX < 0 ? 0 : event.clientX - (46 / 2) },
       text: showTime((event.clientX - Math.floor(x)) / progress.current.offsetWidth),
     }));
-  };
-  const onMouseOver = () => {
+  }, [tooltip]);
+  const onMouseOver = useCallback(() => {
     if (!trackIsMounted) return;
     setTooltip(state => ({ ...state, show: true }));
-  };
-  const onMouseOut = () => {
+  },[tooltip]);
+  const onMouseOut = useCallback(() => {
     if (!props.track.source?.howl) return;
     setTooltip(state => ({ ...state, show: false }));
-  };
+  }, []);
   useEffect(() => {
-    if (props.track.source?.howl) requestAnimationFrameId = requestAnimationFrame(step.bind(null, sound, lineRef?.current));
+    requestAnimationFrameId = requestAnimationFrame(step.bind(null, sound, lineRef?.current));
     return function cleanup() {
       window.cancelAnimationFrame(requestAnimationFrameId);
     }
-  })
+  });
 
   return (
     <ProgressSC id="progress"

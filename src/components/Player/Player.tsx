@@ -1,4 +1,4 @@
-import React, { Suspense, useCallback, useEffect, useState } from "react";
+import React, { Suspense } from "react";
 import { Howl, Howler } from 'howler';
 import { TrackInfo, Controls, Progress, Volume } from "./components";
 import { IconWrapper } from "../Icon/IconWrapper";
@@ -15,15 +15,6 @@ const PlayerWrapperSC = styled.div(props => ({
 const PlayerSC = styled.div(props => ({
   ...playerThemes[props.theme]
 }));
-const defaultSettings = {
-  volume: +JSON.parse(window.localStorage.getItem("player_settings"))?.settings?.volume / 100 || 0.5,
-  muted: false,
-  showSlider: false
-}
-
-const destroy = () => {
-  Howler.stop();
-}
 const getTrackById = (tracks, id) => tracks.find(track => track.id === id);
 const getTrackIndex = (tracks, id) => tracks.findIndex(track => track.id === id);
 const getPlayingTrack = (tracks) => tracks.find(track => track?.howl);
@@ -40,61 +31,57 @@ const updatedTracks = (array, index, howl) => {
   return updatedTracks;
 };
 
-const Player: React.FunctionComponent<PlayerProps> = 
-React.memo((props: PlayerProps) => {
-  const [playerState, setPlayerState] = 
-  useState<TPlayerState>({
-    track: {
-      playTime: "0:00",
-      index: 0,
-      percent: 0,
-      loading: false,
-      duration: "0:00",
-      play: false,
-      source: props.tracks[0]
-    },
-    tracks: props.tracks,
-    playlist: false,
-    settings: defaultSettings
-  });
-  const { track, tracks, playlist, settings } = playerState;
-  /** 
-   ** TODO: update state fix - https://stackoverflow.com/questions/56108962/usestate-always-is-default-value-in-itself
-   * */
-  const setState = useCallback((newValue) => setPlayerState({...playerState, ...newValue}), [playerState]);
-
-  /**
-* Player class containing the state of our tracks and where we are in it.
-* Includes all methods for playing, skipping, updating the display, etc.
-* @param {Array} props.tracks Array of objects with tracks track details ({title, file, howl}).
-*/
-  const init = () => {
-    Howler.volume(Number(defaultSettings.volume));
-  }
-
-  function createAudioTrack(track) {
-    const howl = new Howl({
-      src: [`/src/assets/audio/${track.filename}`],
-      html5: true, // Force to HTML5 so that the audio can stream in (best for large files).
-      onload: function () {
-        setState({
-          track: {
-            ...playerState.track,
-            source: track,
-            // loading: sound.howl?.state() === 'loaded' ? false : true,
-            duration: formatTime(Math.round(track.howl.duration()))
-          }
-        });
+export default class Player extends React.Component<PlayerProps, TPlayerState> {
+  constructor(props) {
+    super(props);
+    this.state = {
+      track: {
+        playTime: "0:00",
+        index: 0,
+        percent: 0,
+        loading: false,
+        duration: "0:00",
+        play: false,
+        source: this.props.tracks[0]
       },
-      onend: function () {
-        if (track.id < tracks.length) skip('next');
-        else stop();
+      tracks: this.props.tracks,
+      playlist: false,
+      settings: {
+        volume: +JSON.parse(window.localStorage.getItem("player_settings"))?.settings?.volume / 100 || 0.5,
+        muted: false,
+        showSlider: false
       }
-    });
-    return howl;
+    };
+    this.play = this.play.bind(this);
+    this.onTrackChange = this.onTrackChange.bind(this);
+    this.createAudioTrack = this.createAudioTrack.bind(this);
+    this.skip = this.skip.bind(this);
+    this.stop = this.stop.bind(this);
+    this.onClosePlaylist = this.onClosePlaylist.bind(this);
+    this.togglePlaylist = this.togglePlaylist.bind(this);
   }
 
-  const skip = (direction: string) => {
+  componentWillUnmount(): void {
+    Howler.stop();
+  }
+
+  getReorderedTracks(array, active) {
+    const activeIndex = +array.findIndex(track => track.id === +active);
+    const index = activeIndex === -1 ? 0 : activeIndex;
+    const activeTrack = array[activeIndex];
+    this.setState(state => ({
+      ...state,
+      tracks: [...array],
+      track: {
+        ...state.track,
+        index: index,
+        source: activeTrack
+      }
+    }));
+  };
+
+  skip(direction: string) {
+    const {track, tracks} = this.state;
     const index = direction === "next" ? (track.index + 1 > tracks.length - 1 ?
       0 : track.index + 1) : (track.index - 1 < 0 ? tracks.length - 1 : track.index - 1);
     /**
@@ -104,15 +91,15 @@ React.memo((props: PlayerProps) => {
     // Get the next track based on the direction of the track.
     if (track.source.howl) track.source.howl.stop();
     const clearedTracks = resetHowls(tracks);
-    const newTrack = createAudioTrack(clearedTracks[index]);
+    const newTrack = this.createAudioTrack(clearedTracks[index]);
     newTrack.play();
-    setState({
-      ...playerState,
+    this.setState((state: TPlayerState) => ({
+      ...state,
       tracks: [
         ...updatedTracks(clearedTracks, index, newTrack)
       ],
       track: {
-        ...playerState.track,
+        ...state.track,
         time: 0,
         play: true,
         percent: 0,
@@ -122,11 +109,53 @@ React.memo((props: PlayerProps) => {
           howl: newTrack
         }
       }
-    });
+    }));
   };
 
-  function play(value, id) {
-    let tracksArr = tracks;
+  stop() {
+    const { howl } = getPlayingTrack(this.state.tracks);
+    howl.stop();
+    this.setState(state => ({
+      ...state,
+      track: {
+        ...state.track,
+        playTime: "0:00",
+        source: {
+          ...state.track.source,
+          howl: null,
+        },
+        play: false
+      }
+    }));
+  }
+
+  createAudioTrack(track) {
+    const self = this;
+    const howl = new Howl({
+      src: [`/src/assets/audio/${track.filename}`],
+      html5: true, // Force to HTML5 so that the audio can stream in (best for large files).
+      onload: function () {
+        self.setState((state: TPlayerState) => ({
+          ...state,
+          track: {
+            ...state.track,
+            source: track,
+            // loading: sound.howl?.state() === 'loaded' ? false : true,
+            duration: formatTime(Math.round(state.track.source.howl?.duration()))
+          }
+        }));
+      },
+      onend: function () {
+        if (self.state.track.source.id < self.state.tracks.length) self.skip('next');
+        else self.stop();
+      }
+    });
+    return howl;
+  }
+  
+  play(value, id) {
+    let tracksArr = this.state.tracks;
+    const {track, tracks} = this.state;
     const playingTrack = getPlayingTrack(tracks);
     if (playingTrack?.id !== id) {
       playingTrack?.howl?.stop();
@@ -134,12 +163,12 @@ React.memo((props: PlayerProps) => {
     };
     const sound = id ? getTrackById(tracksArr, id) : track.source;
     if (!sound?.howl) {
-      sound.howl = createAudioTrack(sound);
+      sound.howl = this.createAudioTrack(sound);
     }
     const index = id ? getTrackIndex(tracksArr, id) : track.index;
     tracksArr = updatedTracks(tracksArr, index, sound.howl);
     sound.howl.play();
-    setPlayerState(state => ({
+    this.setState((state: TPlayerState) => ({
       ...state,
       tracks: [...tracksArr],
       track: {
@@ -157,11 +186,11 @@ React.memo((props: PlayerProps) => {
   /**
 * Pause the currently playing track.
 */
-  function pause(value, id) {
+  pause(value: boolean, id: number) {
     // Get the Howl we want to manipulate.
-    const { howl } = id ? getTrackById(tracks, id) : track.source;
+    const { howl } = id ? getTrackById(this.state.tracks, id) : this.state.track.source;
     // Pause the sound.
-    setPlayerState(state => ({
+    this.setState((state: TPlayerState) => ({
       ...state,
       track: {
         ...state.track,
@@ -170,127 +199,93 @@ React.memo((props: PlayerProps) => {
     }));
     howl.pause();
   }
-  const stop = () => {
-    const { howl } = getPlayingTrack(tracks);
-    howl.stop();
-    setState({
-      ...playerState,
-      track: {
-        ...playerState.track,
-        source: {
-          ...playerState.track.source,
-          howl: null,
-        },
-        play: false
-      }
-    });
-  }
-  const onTrackChange = (value, id) => {
-    if (value) play(value, id || null);
-    else pause(value, id || null);
+  onTrackChange(value, id) {
+    if (value) this.play(value, id || null);
+    else this.pause(value, id || null);
   };
-  const togglePlaylist = () => {
-    setPlayerState(state => ({ ...state, playlist: !state.playlist }));
-  };
-  const onClosePlaylist = (value) => {
-    setPlayerState(state => ({ ...state, playlist: value }));
+  togglePlaylist() {
+    this.setState((state: TPlayerState)  => ({ ...state, playlist: !state.playlist }));
   };
 
-  const getReorderedTracks = (array, active) => {
-    const activeIndex = +array.findIndex(track => track.id === +active);
-    const index = activeIndex === -1 ? 0 : activeIndex;
-    const activeTrack = array[activeIndex];
-    setPlayerState(state => ({
-      ...state,
-      tracks: [...array],
-      track: {
-        ...state.track,
-        index: index,
-        source: activeTrack
-      }
-    }));
+  onClosePlaylist(value) {
+    this.setState(state => ({ ...state, playlist: value }));
   };
 
-  useEffect((): void => init(), [0]);
-  // useEffect(() => console.log(track), [playerState]);
-  useEffect(() => {
-    return function cleanup() { destroy() }
-  }, []);
-
-
-  const position = props.position || "fixed";
-  const playback = track.play ? "play" : "pause";
-  const defaultButtonStyle = {
-    boxShadow: buttonStyles[props.theme].boxShadow,
-    ...buttonStyles[props.theme].defaultButton
-  };
-  return (
-    <PlayerWrapperSC position={position} className="playerWrapper">
-      <div className="container">
-        <div className="grid">
-          <div className="grid__col-12 mb-0">
-            <PlayerSC theme={props.theme} className="player">
-              <TrackInfo
-                title={track.source.title}
-                cover={track.source.cover}
-                artist={track.source.artist}
-                track={track.source.howl}
-                duration={track.duration}
-              />
-              <div className="controlsOuter px-6 px-xs-4">
-                <div className="controlsInner d-flex align-items--center">
-                  <IconWrapper
-                    title="Playlist"
-                    role="button"
-                    tabIndex="0"
-                    noAlign={true}
-                    styles={defaultButtonStyle}
-                    classes="mr-5"
-                    iconName="playlist"
-                    onKeyPress={togglePlaylist}
-                    onClick={togglePlaylist} />
-                  <Controls
-                    theme={props.theme}
-                    loading={track.loading}
-                    currentTrackIndex={track.index}
-                    items={tracks}
-                    onSkip={skip}
-                    onPlay={onTrackChange}
-                    playback={playback}
-                    onPause={onTrackChange} />
-                  <Volume
-                    level={settings.volume}
-                    theme={props.theme}
-                    muted={settings.muted}
-                    slider={{
-                      value: settings.volume,
-                      start: 50,
-                    }}
-                  />
+  render() {
+    const position = this.props.position || "fixed";
+    const { theme } = this.props;
+    const {tracks, track, settings, playlist} = this.state;
+    const playback = track.play ? "play" : "pause";
+    const defaultButtonStyle = {
+      boxShadow: buttonStyles[theme].boxShadow,
+      ...buttonStyles[theme].defaultButton
+    };
+    return (
+      <PlayerWrapperSC position={position} className="playerWrapper">
+        <div className="container">
+          <div className="grid">
+            <div className="grid__col-12 mb-0">
+              <PlayerSC theme={theme} className="player">
+                <TrackInfo
+                  title={track.source.title}
+                  cover={track.source.cover}
+                  artist={track.source.artist}
+                  track={track.source.howl}
+                  duration={track.duration}
+                />
+                <div className="controlsOuter px-6 px-xs-4">
+                  <div className="controlsInner d-flex align-items--center">
+                    <IconWrapper
+                      title="Playlist"
+                      role="button"
+                      tabIndex="0"
+                      noAlign={true}
+                      styles={defaultButtonStyle}
+                      classes="mr-5"
+                      iconName="playlist"
+                      onKeyPress={this.togglePlaylist}
+                      onClick={this.togglePlaylist} />
+                    <Controls
+                      theme={theme}
+                      loading={track.loading}
+                      currentTrackIndex={track.index}
+                      items={tracks}
+                      onSkip={this.skip}
+                      onPlay={this.onTrackChange}
+                      playback={playback}
+                      onPause={this.onTrackChange} />
+                    <Volume
+                      level={settings.volume}
+                      theme={theme}
+                      muted={settings.muted}
+                      slider={{
+                        value: settings.volume,
+                        start: 50,
+                      }}
+                    />
+                  </div>
                 </div>
-              </div>
-              <Progress
-                theme={props.theme}
-                percent={track.percent}
-                track={track} />
-              <Suspense fallback="loading">
-                <Playlist
-                  show={playlist}
-                  theme={props.theme}
-                  playback={onTrackChange}
-                  onReorder={getReorderedTracks}
-                  onPlay={onTrackChange}
-                  onPause={onTrackChange}
-                  currentTrack={track}
-                  items={tracks}
-                  onClose={onClosePlaylist} />
-              </Suspense>
-            </PlayerSC>
+                <Progress
+                  theme={this.props.theme}
+                  percent={track.percent}
+                  track={track} />
+                <Suspense fallback="loading">
+                  <Playlist
+                    show={playlist}
+                    theme={theme}
+                    playback={this.onTrackChange}
+                    onReorder={this.getReorderedTracks}
+                    onPlay={this.onTrackChange}
+                    onPause={this.onTrackChange}
+                    currentTrack={track}
+                    items={tracks}
+                    onClose={this.onClosePlaylist} />
+                </Suspense>
+              </PlayerSC>
+            </div>
           </div>
         </div>
-      </div>
-    </PlayerWrapperSC>
-  );
-});
-
-export default Player;
+      </PlayerWrapperSC>
+    );
+  }
+}

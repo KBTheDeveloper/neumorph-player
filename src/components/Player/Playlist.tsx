@@ -1,5 +1,5 @@
 import { mdiClose } from '@mdi/js';
-import React, { FunctionComponent, useRef, useEffect, useState } from 'react'
+import React, { FunctionComponent, useRef, useEffect, useState, useCallback } from 'react'
 import styled from 'styled-components';
 import { Button, Column, Grid, Track } from "..";
 import { scrollBarStyle, ScrollStyleType } from '../../utils/css';
@@ -46,9 +46,9 @@ const Playlist: FunctionComponent<IPlaylist> = (props) => {
   const [bottom, setBottom] = useState<string>("");
   const listRef = useRef<HTMLDivElement | null>(null)
   const listContainer = useRef<HTMLUListElement | null>(null);
-  const onPlaybackChange = (value, id) => {
+  const onPlaybackChange = useCallback((value, id) => {
     props.playback(value, id);
-  }  
+  },[]);
   const items = props.items.map((item, i) => <Track
     theme={props.theme}
     onPause={onPlaybackChange}
@@ -57,7 +57,7 @@ const Playlist: FunctionComponent<IPlaylist> = (props) => {
     item={item}
     key={item.id} />);
 
-  const onClosePlaylist = () => props.onClose(false);
+  const onClosePlaylist = useCallback(() => props.onClose(false), []);
   useEffect(() => {
     const { height } = listRef.current.closest(".player").getBoundingClientRect();
     setBottom(`${height - 5}px`);

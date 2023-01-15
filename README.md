@@ -7,8 +7,8 @@
 Several options to get up and running:
 
 * Clone the repo: git clone https://github.com/KBTheDeveloper/neumorph-player.js.git
-* Install with npm: npm install neumorph-player
-* Install with Yarn: yarn add neumorph-player
+* Install with npm: npm install @kbthedeveloper/neumorph-**player**
+* Install with Yarn: yarn add @kbthedeveloper/neumorph-player
 
 ## Usage 
 Using as React component
@@ -23,7 +23,7 @@ Using as React component
 List of tracks to in a Track format
 
 ### Position `String` `"fixed"`
-Player position
+Set the player position
 
 ### Theme `String` `"dark"`
 There are 3 themes out of the box: dark, light, and blue

@@ -155,7 +155,7 @@ const playlistGeneralStyles = {
   borderTopLeftRadius: 5,
   borderTopRightRadius: 5,
   ...mixins.neuMorphismShadow("inset 1px 2px 1px rgba(255, 255, 255, 0.06)", "inset -1px -2px 1px rgba(49, 48, 65, 0.25)"),
-  animation: "fadeinPlaylist .2s",
+  animation: "fadeInPlaylist .2s",
   [`@media${breakpoints.xs}`]: {
     padding: "40px 0 0 0"
   },

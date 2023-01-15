@@ -44,8 +44,6 @@ export default {
                     'sass-loader',
                 ],
             },
-            // Loading glyphicons => https://github.com/gowravshekar/bootstrap-webpack
-            // Using here url-loader and file-loader
             {
                 test: /\.(png|jpg|gif|svg)$/,
                 loader: 'file-loader',
@@ -60,14 +58,9 @@ export default {
                     name: 'assets/audio/[name].[ext]?[hash]'
                 }
             },
-            // {
-            //     test: /\.json$/,
-            //     loader: "json-loader"
-            // },
         ],
     },
     plugins: [
-        //Generate index.html in /dist => https://github.com/ampedandwired/html-webpack-plugin
         new HtmlWebpackPlugin({
             filename: 'index.html', //Name of file in ./dist/
             template: `${projectPath}/public/index.html`, //Name of template in ./src
@@ -80,8 +73,4 @@ export default {
             chunkFilename: "./assets/[id].css"
         }),
     ],
-    // externals: {
-    //     react: "React",
-    //     "react-dom": "ReactDOM",
-    // },
 }

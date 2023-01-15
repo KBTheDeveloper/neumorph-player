@@ -1,14 +1,12 @@
 import { mdiPause, mdiPlay } from "@mdi/js";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { appPalette } from "../../utils/guides";
 import { Button } from "../../components";
-import { mixins } from "../../styles/jss/mixins";
 import styled from "styled-components";
 import { TrackItem } from "./types";
 import { buttonStyles } from "./styles/themes";
 
-const TrackSC = styled.li.attrs(props => ({
-  draggable: true}))`
+const TrackSC = styled.li`
   &button {
     border: none;
     padding: 10px 5.5rem;
@@ -57,7 +55,7 @@ const TrackSC = styled.li.attrs(props => ({
     background-repeat: no-repeat;
   }
   &.playlist__item--is-playing {
-    & .visualiser {
+    & .visualizer {
       display: "flex";
     }
   }
@@ -88,20 +86,14 @@ const TrackSC = styled.li.attrs(props => ({
 
 export const Track: React.FunctionComponent<TrackItem> = (props: TrackItem) => {
   const [play, setPlay] = useState(false);
-  const onPlay = () => {
+  const onPlay = useCallback(() => {
     props.onPlay(true, props.item.id);
     setPlay(true);
-  };
-  const onPause = () => {
+  }, [play]);
+  const onPause = useCallback(() => {
     props.onPause(false, props.item.id);
     setPlay(false);
-  };
-  // const onDragStart = (ev) => {
-  //   ev.target.classList.add("selected");
-  // };
-  // const onDragEnd = (ev) => {
-  //   ev.target.classList.remove("selected");
-  // };
+  }, [play]);
   useEffect(() => {
     if (play && props.item.howl && props.item.howl._sounds[0]._paused) {
       setPlay(false);

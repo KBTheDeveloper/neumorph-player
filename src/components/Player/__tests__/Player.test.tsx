@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom'
 import * as React from 'react'
 import { render, fireEvent, waitFor, cleanup } from '@testing-library/react'
-import Player from "../";
+import Player from "../Player";
 import '../../../../utils/SVGMocks';
 import '../../../../utils/HowlerMock';
 
@@ -33,6 +33,13 @@ const tracks = [
 ];
 
 afterEach(cleanup);
+
+test("render player", async () => {
+  const { container } = render(<Player theme="dark" tracks={tracks} />);
+  expect(Howler);
+  await waitFor(() => expect(container.querySelector(".playerWrapper")).toBeTruthy());
+});
+
 
 test("load default track in player", async () => {
   const { container } = render(<Player theme="dark" tracks={tracks} />);
