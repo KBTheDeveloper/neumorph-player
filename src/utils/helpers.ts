@@ -28,18 +28,6 @@ export const showMoreOnScroll = (bottomLine: number, callback: Function): void =
   }
 };
 
-export function sumOfArrayNumbers(arr: number[], sum: number): any[] {
-  for (let i = 0; i < arr.length; i++) {
-    const num = arr[i];
-    for (let j = i + 1; j < arr.length; j++) {
-      const compareNum = arr[j];
-      if (compareNum + num === sum) {
-        return [compareNum, num];
-      }
-    }
-  }
-  return [];
-}
 
 export function getFormattedDate(type: string = "DD-MM-YYYY") {
   const date = new Date();
@@ -74,18 +62,6 @@ export function debounce(func, timeout = 300) {
   };
 }
 
-export const reorderArray = (values: { newIndex: number, oldIndex: number }, array: Array<any>) => {
-  const movedItem = array.filter((item, index) => index === values.oldIndex);
-  const remainingItems = array.filter((item, index) => index !== values.oldIndex);
-
-  const reorderedItems = [
-    ...remainingItems.slice(0, values.newIndex),
-    movedItem[0],
-    ...remainingItems.slice(values.newIndex)
-  ];
-
-  return reorderedItems;
-}
 export const lazy = (componentImportFn: Function) => React.lazy(async () => {
   let obj = await componentImportFn()
   return typeof obj.default === 'function' ? obj : obj.default
