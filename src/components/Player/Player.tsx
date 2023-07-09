@@ -81,7 +81,7 @@ export default class Player extends React.Component<PlayerProps, TPlayerState> {
   };
 
   skip(direction: string) {
-    const {track, tracks} = this.state;
+    const { track, tracks } = this.state;
     const index = direction === "next" ? (track.index + 1 > tracks.length - 1 ?
       0 : track.index + 1) : (track.index - 1 < 0 ? tracks.length - 1 : track.index - 1);
     /**
@@ -152,10 +152,10 @@ export default class Player extends React.Component<PlayerProps, TPlayerState> {
     });
     return howl;
   }
-  
+
   play(value, id) {
     let tracksArr = this.state.tracks;
-    const {track, tracks} = this.state;
+    const { track, tracks } = this.state;
     const playingTrack = getPlayingTrack(tracks);
     if (playingTrack?.id !== id) {
       playingTrack?.howl?.stop();
@@ -204,7 +204,7 @@ export default class Player extends React.Component<PlayerProps, TPlayerState> {
     else this.pause(value, id || null);
   };
   togglePlaylist() {
-    this.setState((state: TPlayerState)  => ({ ...state, playlist: !state.playlist }));
+    this.setState((state: TPlayerState) => ({ ...state, playlist: !state.playlist }));
   };
 
   onClosePlaylist(value) {
@@ -214,7 +214,7 @@ export default class Player extends React.Component<PlayerProps, TPlayerState> {
   render() {
     const position = this.props.position || "fixed";
     const { theme } = this.props;
-    const {tracks, track, settings, playlist} = this.state;
+    const { tracks, track, settings, playlist } = this.state;
     const playback = track.play ? "play" : "pause";
     const defaultButtonStyle = {
       boxShadow: buttonStyles[theme].boxShadow,

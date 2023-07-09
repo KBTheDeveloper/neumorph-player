@@ -36,7 +36,8 @@ const step = function (context, element) {
   // Get the Howl we want to manipulate.
   // Determine our current seek position.
   // If the sound is still playing, continue stepping.
-  const value = ((context.seek() / context.duration()) * 100) || 0;
+
+  const value = context?.seek ? ((context.seek() / context.duration()) * 100) : 0;
   element.style.width = `${value}%`;
   requestAnimationFrameId = requestAnimationFrame(step.bind(null, context, element));
 };

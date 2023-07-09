@@ -1,9 +1,9 @@
 import { hot } from "react-hot-loader";
 import React, { Suspense } from 'react';
-import Ripple from './components/Ripple';
-import { TrackType } from "./components/Player/types";
-const Player = React.lazy(() => import("./components/Player/Player"));
-customElements.define("ripple-element", Ripple);
+import Ripple from '../src/components/Ripple';
+import { TrackType } from "../src/components/Player/types";
+const Player = React.lazy(() => import("../src/components/Player/Player"));
+if (!customElements.get("ripple-element")) customElements.define("ripple-element", Ripple);
 
 export const App: React.FunctionComponent = (props: any) => {
   const tracks: Array<TrackType> = [

@@ -6,6 +6,7 @@ import { scrollBarStyle, ScrollStyleType } from '../../utils/css';
 import { appPalette } from '../../utils/guides';
 import { playlistStyles } from './styles/themes';
 import { IPlaylist } from './types';
+import { keyFrames } from '../../styles/jss/keyframes';
 
 const scrollBarStyles: ScrollStyleType = {
   bar: {
@@ -13,14 +14,15 @@ const scrollBarStyles: ScrollStyleType = {
   },
   track: {
     background: "transparent"
-  }, 
+  },
   thumb: {
     border: "1px solid transparent",
     borderRadius: 4,
     background: appPalette.white
   }
-} 
+}
 const PlaylistContainer = styled.div({
+  "@keyframes fadeIn": keyFrames["@keyframes fadeIn"]("bottom", 140),
   paddingTop: 10,
   maxHeight: "600px",
   height: "100%",
@@ -32,9 +34,10 @@ const PlaylistContainer = styled.div({
 
 const PlaylistWrapper = styled.div(props => ({
   ...playlistStyles[props.theme],
+  animation: "fadeIn .2s",
   "ul": {
     padding: 0
-  }
+  },
 }));
 
 const closeStyles = {
@@ -48,7 +51,7 @@ const Playlist: FunctionComponent<IPlaylist> = (props) => {
   const listContainer = useRef<HTMLUListElement | null>(null);
   const onPlaybackChange = useCallback((value, id) => {
     props.playback(value, id);
-  },[]);
+  }, []);
   const items = props.items.map((item, i) => <Track
     theme={props.theme}
     onPause={onPlaybackChange}
@@ -64,7 +67,7 @@ const Playlist: FunctionComponent<IPlaylist> = (props) => {
   }, []);
 
   return (
-       <PlaylistWrapper
+    <PlaylistWrapper
       id="playlist"
       hidden={!props.show}
       theme={props.theme}

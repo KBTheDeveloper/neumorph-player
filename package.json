@@ -1,6 +1,6 @@
 {
   "name": "@kbthedeveloper/neumorph-player",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Neumorph Player",
   "main": "index.js",
   "author": "Konstantin Bogdanov",

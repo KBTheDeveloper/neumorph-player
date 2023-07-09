@@ -13,9 +13,8 @@ const playerGeneralStyles = {
 const playerStyles = {
   dark: {
     ...playerGeneralStyles,
-    boxShadow: "inset 1px 2px 1px rgba(255, 255, 255, 0.06), "
-      + "inset -10px -10px 52px rgba(49, 48, 65, 0.25),"
-      + "8px 8px 12px rgba(0, 0, 0, 0.25), -8px -8px 12px rgba(63, 63, 65, 0.25)",
+    boxShadow: `12px 12px 24px #171621,
+    -12px -12px 24px #252435;`,
     backgroundColor: appPalette.darkPurple,
   },
   light: {
@@ -145,7 +144,7 @@ const volumeStyles = {
   blue: {
     ...genVolumeStyles(appPalette.blue.main, appPalette.blue.blueSkyGradient)
   },
-}
+};
 const playlistGeneralStyles = {
   position: "absolute",
   width: "100%",
@@ -155,7 +154,6 @@ const playlistGeneralStyles = {
   borderTopLeftRadius: 5,
   borderTopRightRadius: 5,
   ...mixins.neuMorphismShadow("inset 1px 2px 1px rgba(255, 255, 255, 0.06)", "inset -1px -2px 1px rgba(49, 48, 65, 0.25)"),
-  animation: "fadeInPlaylist .2s",
   [`@media${breakpoints.xs}`]: {
     padding: "40px 0 0 0"
   },
