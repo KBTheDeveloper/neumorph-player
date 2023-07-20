@@ -2,7 +2,7 @@ Arguments:
   /home/kbthedev/.nvm/versions/node/v14.19.1/bin/node /home/kbthedev/.nvm/versions/node/v14.19.1/bin/yarn add -D @pmmmwh/react-refresh-webpack-plugin react-refresh
 
 PATH: 
-  /opt/firefox/firefox:/home/kbthedev/.local/bin:/home/kbthedev/bin:/opt/firefox/firefox:/home/kbthedev/.nvm/versions/node/v14.19.1/bin:/home/kbthedev/.local/bin:/home/kbthedev/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin
+  /home/kbthedev/.yarn/bin:/home/kbthedev/.config/yarn/global/node_modules/.bin:/home/kbthedev/.vscode-server/bin/660393deaaa6d1996740ff4880f1bad43768c814/bin/remote-cli:/home/kbthedev/.yarn/bin:/home/kbthedev/.config/yarn/global/node_modules/.bin:/home/kbthedev/.nvm/versions/node/v18.16.1/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Windows/system32:/mnt/c/Windows:/mnt/c/Windows/System32/Wbem:/mnt/c/Windows/System32/WindowsPowerShell/v1.0/:/mnt/c/Windows/System32/OpenSSH/:/mnt/c/Program Files/dotnet/:/mnt/c/Users/manag/AppData/Local/Microsoft/WindowsApps:/mnt/c/Development/VS Code/bin:/snap/bin
 
 Yarn version: 
   1.22.18
@@ -14,8 +14,17 @@ Platform:
   linux x64
 
 Trace: 
-  Error: connect EHOSTUNREACH 104.16.27.35:443
-      at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1159:16)
+  Error: https://registry.yarnpkg.com/-/user/org.couchdb.user:kbthedeveloper: failed to authenticate: Could not authenticate kbthedeveloper: bad password
+      at params.callback [as _callback] (/home/kbthedev/.yarn/lib/cli.js:66145:18)
+      at self.callback (/home/kbthedev/.yarn/lib/cli.js:140890:22)
+      at Request.emit (node:events:513:28)
+      at Request.<anonymous> (/home/kbthedev/.yarn/lib/cli.js:141862:10)
+      at Request.emit (node:events:513:28)
+      at IncomingMessage.<anonymous> (/home/kbthedev/.yarn/lib/cli.js:141784:12)
+      at Object.onceWrapper (node:events:627:28)
+      at IncomingMessage.emit (node:events:525:35)
+      at endReadableNT (node:internal/streams/readable:1359:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:82:21)
 
 npm manifest: 
   {
