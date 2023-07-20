@@ -1,5 +1,9 @@
 import { Howl } from 'howler';
-import { IPlayerSettings } from "../../store/reducer";
+type PlayerSettings = {
+  volume: number,
+  muted: boolean,
+  showSlider: boolean
+};
 
 export interface IPlayerMethods {
   onPause: Function,
@@ -95,7 +99,7 @@ export type TPlayerState = {
   track: TCurrentTrack,
   tracks: TrackType[],
   playlist: boolean,
-  settings: IPlayerSettings
+  settings: PlayerSettings
 }
 
 export type VolumeProps = {

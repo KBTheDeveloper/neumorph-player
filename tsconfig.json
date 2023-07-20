@@ -7,11 +7,12 @@
     ]
   },
   "rulesDirectory": [],
+  "files": ["src/index.ts"],
   "compilerOptions": {
     "target": "es2022",
     "module": "esnext",
     "moduleResolution": "node",
-    "declaration": false,
+    "declaration": true,
     "noImplicitAny": false,
     "sourceMap": true,
     "jsx": "react",
@@ -24,15 +25,15 @@
       "dom.iterable",
       "esnext"
     ],
-    "allowJs": true,
+    "allowJs": false,
     "skipLibCheck": true,
     "strict": false,
     "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
+    "noEmit": false,
     "incremental": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "outDir": "./dist/"
+    "outDir": "dist"
   },
   "ts-node": {
     // It is faster to skip typechecking.
@@ -43,7 +44,7 @@
       // compilerOptions specified here will override those declared below,
       // but *only* in ts-node.  Useful if you want ts-node and tsc to use
       // different options with a single tsconfig.json.
-      "module": "commonjs"
+      "module": "commonjs", "outDir": "dist"
     }
   },
   "compileOnSave": false,
@@ -52,7 +53,6 @@
   ],
   "include": [
     "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx"
-, "src/components/Input/File/FileList.tsz"  ]
+    "src/*.ts",
+    "demo/*.tsx",]
 }

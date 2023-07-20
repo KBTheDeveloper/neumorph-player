@@ -2,7 +2,7 @@ Arguments:
   /home/kbthedev/.nvm/versions/node/v18.16.1/bin/node /home/kbthedev/.yarn/bin/yarn.js publish
 
 PATH: 
-  /home/kbthedev/.yarn/bin:/home/kbthedev/.config/yarn/global/node_modules/.bin:/home/kbthedev/.vscode-server/bin/695af097c7bd098fbf017ce3ac85e09bbc5dda06/bin/remote-cli:/home/kbthedev/.yarn/bin:/home/kbthedev/.config/yarn/global/node_modules/.bin:/home/kbthedev/.nvm/versions/node/v18.16.1/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Windows/system32:/mnt/c/Windows:/mnt/c/Windows/System32/Wbem:/mnt/c/Windows/System32/WindowsPowerShell/v1.0/:/mnt/c/Windows/System32/OpenSSH/:/mnt/c/Program Files/dotnet/:/mnt/c/Users/manag/AppData/Local/Microsoft/WindowsApps:/mnt/c/Development/VS Code/bin:/snap/bin
+  /home/kbthedev/.yarn/bin:/home/kbthedev/.config/yarn/global/node_modules/.bin:/home/kbthedev/.vscode-server/bin/660393deaaa6d1996740ff4880f1bad43768c814/bin/remote-cli:/home/kbthedev/.yarn/bin:/home/kbthedev/.config/yarn/global/node_modules/.bin:/home/kbthedev/.nvm/versions/node/v18.16.1/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Windows/system32:/mnt/c/Windows:/mnt/c/Windows/System32/Wbem:/mnt/c/Windows/System32/WindowsPowerShell/v1.0/:/mnt/c/Windows/System32/OpenSSH/:/mnt/c/Program Files/dotnet/:/mnt/c/Users/manag/AppData/Local/Microsoft/WindowsApps:/mnt/c/Development/VS Code/bin:/snap/bin
 
 Yarn version: 
   1.22.19
@@ -14,7 +14,7 @@ Platform:
   linux x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/-/user/org.couchdb.user:kbthedeveloper: child "otp" fails because ["otp" with value "G6DfN$1986" fails to match the required pattern: /^\d+$/, "otp" length must be 64 characters long]
+  Error: https://registry.yarnpkg.com/-/user/org.couchdb.user:kbthedeveloper: failed to authenticate: Could not authenticate kbthedeveloper: bad password
       at params.callback [as _callback] (/home/kbthedev/.yarn/lib/cli.js:66145:18)
       at self.callback (/home/kbthedev/.yarn/lib/cli.js:140890:22)
       at Request.emit (node:events:513:28)
