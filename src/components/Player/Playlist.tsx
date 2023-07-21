@@ -47,12 +47,17 @@ const closeStyles = {
 }
 const Playlist: FunctionComponent<IPlaylist> = (props) => {
   const [bottom, setBottom] = useState<string>("");
+  const [movedTrackIndex, setMovedTrackIndex] = useState<number | null>(null);
   const listRef = useRef<HTMLDivElement | null>(null)
   const listContainer = useRef<HTMLUListElement | null>(null);
   const onPlaybackChange = useCallback((value, id) => {
     props.playback(value, id);
   }, []);
+  const onMove = (id: number) => {
+    setMovedTrackIndex(id);
+  }
   const items = props.items.map((item, i) => <Track
+    onMove={onMove}
     theme={props.theme}
     onPause={onPlaybackChange}
     index={i}
@@ -65,7 +70,10 @@ const Playlist: FunctionComponent<IPlaylist> = (props) => {
     const { height } = listRef.current.closest(".player").getBoundingClientRect();
     setBottom(`${height - 5}px`);
   }, []);
-
+  const onDrop = (e) => {
+    const item = e.target.closest('.playlist__item') as HTMLElement;
+    props.onReorder({moved: movedTrackIndex, target: +item.dataset.track})
+  };
   return (
     <PlaylistWrapper
       id="playlist"
@@ -84,7 +92,7 @@ const Playlist: FunctionComponent<IPlaylist> = (props) => {
               view="fab"
               icon={{ path: mdiClose, width: 30, height: 30, viewBox: "0 0 25 25", color: appPalette.white }}
               color="transparent" />
-            <PlaylistContainer id="playlistContainer"><ul ref={listContainer}>{items}</ul></PlaylistContainer>
+            <PlaylistContainer id="playlistContainer"><ul onDrop={onDrop} ref={listContainer}>{items}</ul></PlaylistContainer>
           </Column>
         </Grid>
       </div>

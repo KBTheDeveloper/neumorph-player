@@ -65,31 +65,31 @@ export default class Player extends React.Component<PlayerProps, TPlayerState> {
     Howler.stop();
   }
 
-  getReorderedTracks(array, active) {
-    const activeIndex = +array.findIndex(track => track.id === +active);
-    const index = activeIndex === -1 ? 0 : activeIndex;
-    const activeTrack = array[activeIndex];
+  getReorderedTracks(values: { moved: number, target: number }) {
+    const movedTrackIndex = +this.state.tracks.findIndex(track => track.id === values.moved);
+    const targetTrackIndex = +this.state.tracks.findIndex(track => track.id === values.target);
+    const activeTrack = this.state.tracks[movedTrackIndex];
+    const reorderedTracks = [...this.state.tracks];
+    reorderedTracks.splice(movedTrackIndex, 1);
+    reorderedTracks.splice(targetTrackIndex, 0, activeTrack);
     this.setState(state => ({
       ...state,
-      tracks: [...array],
-      track: {
-        ...state.track,
-        index: index,
-        source: activeTrack
-      }
+      tracks: [...reorderedTracks],
     }));
   };
 
   skip(direction: string) {
     const { track, tracks } = this.state;
-    const index = direction === "next" ? (track.index + 1 > tracks.length - 1 ?
-      0 : track.index + 1) : (track.index - 1 < 0 ? tracks.length - 1 : track.index - 1);
+    const trackIndex = tracks.findIndex(item => item.id === track.source.id);
+    const index = direction === "next" ? (trackIndex + 1 > tracks.length - 1 ?
+      0 : trackIndex + 1) : (trackIndex - 1 < 0 ? tracks.length - 1 : trackIndex - 1);
+    const howl = getPlayingTrack(tracks);
     /**
     * Skip to the next or previous track.
     * @param  {String} direction 'next' or 'prev'.
     */
     // Get the next track based on the direction of the track.
-    if (track.source.howl) track.source.howl.stop();
+    if (howl) howl.howl.stop();
     const clearedTracks = resetHowls(tracks);
     const newTrack = this.createAudioTrack(clearedTracks[index]);
     newTrack.play();
@@ -154,6 +154,7 @@ export default class Player extends React.Component<PlayerProps, TPlayerState> {
   }
 
   play(value, id) {
+    console.log("track: ", id);
     let tracksArr = this.state.tracks;
     const { track, tracks } = this.state;
     const playingTrack = getPlayingTrack(tracks);
@@ -274,7 +275,7 @@ export default class Player extends React.Component<PlayerProps, TPlayerState> {
                     show={playlist}
                     theme={theme}
                     playback={this.onTrackChange}
-                    onReorder={this.getReorderedTracks}
+                    onReorder={this.getReorderedTracks.bind(this)}
                     onPlay={this.onTrackChange}
                     onPause={this.onTrackChange}
                     currentTrack={track}

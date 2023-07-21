@@ -16,7 +16,7 @@ const TooltipSC = styled.div(props => ({
       position: "absolute",
       transform: "translateX(-50%)",
       left: "50%",
-      bottom: -5,
+      bottom: -4,
       borderLeft: "5px solid transparent",
       borderRight: "5px solid transparent",
       borderTop: "5px solid #fff",

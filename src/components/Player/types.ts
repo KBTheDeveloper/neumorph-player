@@ -37,6 +37,7 @@ export interface TrackItem extends Omit<IPlayerMethods, "onSkip"> {
   },
   theme: string,
   index: number,
+  onMove: Function,
   onDrop?: Function,
   children?: React.ReactFragment
 }
