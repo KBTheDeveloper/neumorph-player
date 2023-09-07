@@ -83,7 +83,7 @@ export const Progress: React.FunctionComponent<IProgress> = memo((props: IProgre
     setTooltip(state => ({ ...state, show: true }));
   },[tooltip]);
   const onMouseOut = useCallback(() => {
-    if (!props.track.source?.howl) return;
+    if (!trackIsMounted) return;
     setTooltip(state => ({ ...state, show: false }));
   }, []);
   useEffect(() => {
