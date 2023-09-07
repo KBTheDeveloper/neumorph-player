@@ -97,8 +97,8 @@ export type TIconBg = {
 }
 
 export type TPlayerState = {
-  track: TCurrentTrack,
-  tracks: TrackType[],
+  track: TCurrentTrack | null,
+  tracks: TrackType[] | [],
   playlist: boolean,
   settings: PlayerSettings
 }

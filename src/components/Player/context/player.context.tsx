@@ -1,12 +1,13 @@
-import React from "react";
-import { TState } from "../types";
+import React, { useMemo } from "react";
+import { TPlayerState } from "../types";
 const initialState = {
   tracks: [],
-  currentTrack: null,
+  track: null,
 };
 type Action = {type: "SET_TRACKS"} | {type: "SET_CURRENT_TRACK"};
 type Dispatch = (action: Action) => void;
-export const PlayerContext: React.Context<{state: TState, dispatch: Dispatch} | undefined> = React.createContext(undefined);
+type PlayerState = Omit<TPlayerState, "playlist" | "settings">;
+export const PlayerContext = React.createContext(initialState);
 
 
 export const SET_CURRENT_TRACK = "SET_CURRENT_TRACK";
@@ -20,10 +21,10 @@ export function setTracks(tracks) {
   return {type: "SET_TRACKS", tracks};
 }
 
-export function PlayerReducer(state: TState, action: Action) {
+export function PlayerReducer(state: PlayerState, action: Action) {
   switch(action.type) {
     case "SET_CURRENT_TRACK":
-      return {...state, currentTrack: state.currentTrack};
+      return {...state, track: state.track};
     case "SET_TRACKS":
       return {...state, tracks: state.tracks};
     default:
@@ -34,7 +35,7 @@ export function PlayerReducer(state: TState, action: Action) {
 function PlayerProvider(props) {
   const [state, dispatch] = React.useReducer(PlayerReducer, initialState);
 
-  const data = { state, dispatch };
+  const data = useMemo(() => ({ state, dispatch }), [props.state]);
   return <PlayerContext.Provider value={ data } {...props } />;
 }
 
