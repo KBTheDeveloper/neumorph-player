@@ -45,7 +45,7 @@ let trackIsMounted: null | Howl;
 export const Progress: React.FunctionComponent<IProgress> = memo((props: IProgress) => {
   const progress = useRef<HTMLDivElement>(null);
   const lineRef = useRef<SVGRectElement | null>(null);
-  const sound = props.track.source?.howl;
+  const {howl} = props.track.source;
   const [tooltip, setTooltip] = useState({
     show: false,
     text: "",
@@ -54,8 +54,8 @@ export const Progress: React.FunctionComponent<IProgress> = memo((props: IProgre
 
   const showTime = (per: number) => {
     // Convert the percent into a seek position.
-    if (sound) {
-      return formatTime(sound.duration() * per).replace(/\.\d+/, "");
+    if (howl) {
+      return formatTime(howl.duration() * per).replace(/\.\d+/, "");
     }
   };
   /**
@@ -66,8 +66,8 @@ export const Progress: React.FunctionComponent<IProgress> = memo((props: IProgre
     if (!trackIsMounted) return;
     const { x } = progress.current.getBoundingClientRect();
     const per = (event.clientX - x) / progress.current.offsetWidth;
-    sound.seek(sound.duration() * per);
-  }, [sound]);
+    howl.seek(howl.duration() * per);
+  }, [howl]);
   const onMouseMove = useCallback((event) => {
     trackIsMounted = props.track.source.howl;
     if (!trackIsMounted) return;
@@ -87,7 +87,7 @@ export const Progress: React.FunctionComponent<IProgress> = memo((props: IProgre
     setTooltip(state => ({ ...state, show: false }));
   }, []);
   useEffect(() => {
-    requestAnimationFrameId = requestAnimationFrame(step.bind(null, sound, lineRef?.current));
+    requestAnimationFrameId = requestAnimationFrame(step.bind(null, howl, lineRef?.current));
     return function cleanup() {
       window.cancelAnimationFrame(requestAnimationFrameId);
     }
