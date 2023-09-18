@@ -20,7 +20,13 @@ import {
   mdiCheckAll,
   mdiVolumeMute,
   mdiVolumeHigh,
-  mdiVolumeMedium
+  mdiVolumeMedium,
+  mdiMovie,
+  mdiPictureInPictureBottomRight,
+  mdiFullscreen,
+  mdiShuffle,
+  mdiRepeat,
+  mdiRepeatOnce
 } from '@mdi/js';
 
 export const iconsList = {
@@ -45,5 +51,11 @@ export const iconsList = {
   delete: mdiDelete,
   mute: mdiVolumeMute,
   volumeHigh: mdiVolumeHigh,
-  volumeMedium: mdiVolumeMedium
+  volumeMedium: mdiVolumeMedium,
+  movie: mdiMovie,
+  PIPRight: mdiPictureInPictureBottomRight,
+  fullScreen: mdiFullscreen,
+  shuffle: mdiShuffle,
+  repeat: mdiRepeat,
+  repeatOnce: mdiRepeatOnce
 };

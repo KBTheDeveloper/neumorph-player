@@ -1,14 +1,19 @@
 import { Howl } from 'howler';
+import React from 'react';
 type PlayerSettings = {
   volume: number,
   muted: boolean,
-  showSlider: boolean
+  showSlider: boolean,
+  shuffle: boolean,
+  repeat: "off" | "on" | "once"
 };
 
 export interface IPlayerMethods {
   onPause: Function,
   onPlay: Function,
   onSkip: Function,
+  onShuffle: Function,
+  onRepeat: Function,
 }
 
 export interface IProgress {
@@ -49,6 +54,7 @@ export type TrackType = {
   id: number,
   howl: any,
   cover: string,
+  video?: string,
 };
 
 export type PlayerProps = {
@@ -80,6 +86,7 @@ export type ControlsProps = IPlayerMethods & {
   playback: string,
   currentTrackIndex: any,
   children?: any,
+  videoPlayer?: React.ReactNode | null,
 }
 
 export interface IPlaylist extends Omit<IPlayerMethods, "onSkip"> {

@@ -13,9 +13,13 @@ const IconWrapperSC = styled.div(props => ({
   height: props.height || 40,
   ...props.onClick && { cursor: "pointer" },
   ...props.customStyle,
+  ...props.disabled && {
+    pointerEvents: 'none',
+    opacity: .6
+  }
 }));
 
-export const IconWrapper: React.FunctionComponent<iconWrapperProps> = function(props: iconWrapperProps) {
+export const IconWrapper: React.FunctionComponent<iconWrapperProps> = function (props: iconWrapperProps) {
   const customStyles = props.styles?.name || "";
   const height = props.sizes?.height ?? "25";
   const width = props.sizes?.width ?? "25";
@@ -32,6 +36,7 @@ export const IconWrapper: React.FunctionComponent<iconWrapperProps> = function(p
         onClick={props.onClick}
         customStyle={props.styles}
         width={props.sizes?.width}
+        disabled={props.disabled}
         height={props.sizes?.height}
         className={`${classes} ${customStyles}`}
         onKeyPress={props.onKeyPress}>
