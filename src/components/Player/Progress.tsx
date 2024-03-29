@@ -62,15 +62,14 @@ export const Progress: React.FunctionComponent<IProgress> = memo((props: IProgre
 * Seek to a new position in the currently playing track.
 * @param  {Number} per Percentage through the song to skip.
 */
-  const seek = useCallback(function(event) {
-    if (!trackIsMounted) return;
+  const seek = useCallback(function (event) {
+    if (!sound) return;
     const { x } = progress.current.getBoundingClientRect();
     const per = (event.clientX - x) / progress.current.offsetWidth;
     sound.seek(sound.duration() * per);
   }, [sound]);
   const onMouseMove = useCallback((event) => {
-    trackIsMounted = props.track.source.howl;
-    if (!trackIsMounted) return;
+    if (!sound) return;
     const { x, y } = progress.current.getBoundingClientRect();
     setTooltip(state => ({
       ...state,
@@ -78,14 +77,14 @@ export const Progress: React.FunctionComponent<IProgress> = memo((props: IProgre
       text: showTime((event.clientX - Math.floor(x)) / progress.current.offsetWidth),
     }));
   }, [tooltip]);
-  const onMouseOver = useCallback(() => {
-    if (!trackIsMounted) return;
+  const onMouseOver = () => {
+    if (!sound) return;
     setTooltip(state => ({ ...state, show: true }));
-  },[tooltip]);
-  const onMouseOut = useCallback(() => {
-    if (!props.track.source?.howl) return;
+  };
+  const onMouseOut = () => {
+    if (!sound) return;
     setTooltip(state => ({ ...state, show: false }));
-  }, []);
+  };
   useEffect(() => {
     requestAnimationFrameId = requestAnimationFrame(step.bind(null, sound, lineRef?.current));
     return function cleanup() {
@@ -95,6 +94,7 @@ export const Progress: React.FunctionComponent<IProgress> = memo((props: IProgre
 
   return (
     <ProgressSC id="progress"
+      data-testid="progress"
       theme={props.theme}
       role="progressbar"
       className="progress mt-4"

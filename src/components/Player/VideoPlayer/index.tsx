@@ -37,7 +37,7 @@ const VideoPlayer = React.forwardRef<HTMLVideoElement, IVideoPlayer>((props, ref
       styles={styles}
       iconName="movie"
       onClick={onClick} />
-    {show && createPortal(<HTMLVideoPlayer ref={ref} sound={props.sound} url={props.url} />, VideoPlayerContainer)}</>)
+    {show && createPortal(<HTMLVideoPlayer data-testid="video-player" ref={ref} sound={props.sound} url={props.url} />, VideoPlayerContainer)}</>)
 
 });
 export default VideoPlayer;

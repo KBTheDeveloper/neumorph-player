@@ -76,6 +76,7 @@ const Playlist: FunctionComponent<IPlaylist> = (props) => {
   };
   return (
     <PlaylistWrapper
+      data-testid="playlist"
       id="playlist"
       hidden={!props.show}
       theme={props.theme}

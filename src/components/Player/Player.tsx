@@ -8,7 +8,7 @@ import styled from "styled-components";
 import { buttonStyles, playerStyles as playerThemes } from "./styles/themes";
 import { PlayerProps, TPlayerState } from "./types";
 import VideoPlayer from "./VideoPlayer";
-import { shuffle } from "../../utils/array";
+import {shuffle} from "../../utils/array";
 const Playlist = lazy(() => import("./Playlist"));
 const PlayerWrapperSC = styled.div(props => ({
   position: props.position,
@@ -103,10 +103,11 @@ export default class Player extends React.Component<PlayerProps, TPlayerState> {
     const newTrack = this.createAudioTrack(clearedTracks[index]);
     newTrack.play();
     if (this.videoPlayerRef) this.videoPlayerRef.current?.play();
+    const updTracks = updatedTracks(clearedTracks, index, newTrack);
     this.setState((state: TPlayerState) => ({
       ...state,
       tracks: [
-        ...updatedTracks(clearedTracks, index, newTrack)
+        ...updTracks
       ],
       track: {
         ...state.track,
@@ -115,7 +116,7 @@ export default class Player extends React.Component<PlayerProps, TPlayerState> {
         percent: 0,
         index,
         source: {
-          ...clearedTracks[index],
+          ...updTracks[index],
           howl: newTrack
         }
       }
@@ -156,9 +157,9 @@ export default class Player extends React.Component<PlayerProps, TPlayerState> {
         }));
       },
       onend: function () {
-        console.log("index: ", self.state.track.index);
-        if (self.state.settings.repeat === "once") self.play(true, self.state.track.source.id);
-        else if (self.state.track.source.id === self.state.tracks.length && self.state.settings.repeat === "off") self.stop();
+        if (self.state.settings.repeat === "once") { self.play(true, self.state.track.source.id); }
+        else if (self.state.track.source.id === self.state.tracks.length && self.state.settings.repeat === "off") { self.stop(); }
+        else if (self.state.settings.shuffle) self.play(true, shuffle(self.state.tracks)[0].id);
         else self.skip('next');
       },
       onseek: function () {
@@ -245,7 +246,7 @@ export default class Player extends React.Component<PlayerProps, TPlayerState> {
         <div className="container">
           <div className="grid">
             <div className="grid__col-12 mb-0">
-              <PlayerSC theme={theme} className="player">
+              <PlayerSC data-testid="player" theme={theme} className="player">
                 <TrackInfo
                   title={track.source.title}
                   cover={track.source.cover}

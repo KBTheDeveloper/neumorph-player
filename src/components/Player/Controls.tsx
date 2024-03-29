@@ -52,12 +52,6 @@ export const Controls: FunctionComponent<ControlsProps> = (props: ControlsProps)
     }
   };
 
-  useEffect(() => {
-    document.addEventListener('keydown', onKeyDown);
-    return function cleanup() {
-      document.removeEventListener('keydown', onKeyDown);
-    }
-  });
 
   const togglePlay = () => {
     if (currentTrack?.howl && !currentTrack?.howl._sounds[0]._paused) {
@@ -94,6 +88,13 @@ export const Controls: FunctionComponent<ControlsProps> = (props: ControlsProps)
     else if (repeat === "on") setRepeat("once");
     else setRepeat("off");
   }
+
+  useEffect(() => {
+    document.addEventListener('keydown', onKeyDown);
+    return function cleanup() {
+      document.removeEventListener('keydown', onKeyDown);
+    }
+  });
   useEffect(() => props.onRepeat(repeat), [repeat]);
   const playButtonStyle = {
     ...buttonStyles[props.theme].playButton
@@ -111,6 +112,7 @@ export const Controls: FunctionComponent<ControlsProps> = (props: ControlsProps)
   };
   const buttons = props.playback === "play"
     ? <IconWrapper
+      data-testid="pause-btn"
       role="button"
       title="Pause"
       tabIndex="0"
@@ -131,7 +133,7 @@ export const Controls: FunctionComponent<ControlsProps> = (props: ControlsProps)
       onClick={togglePlay}
       onKeyPress={togglePlay} />;
   return (
-    <div className="controls d-flex align-items--center">
+    <div data-testid="controls" className="controls d-flex align-items--center">
       {!isMobile() && <IconWrapper
         noAlign={true}
         title="Previous track"
@@ -171,7 +173,7 @@ export const Controls: FunctionComponent<ControlsProps> = (props: ControlsProps)
         tabIndex="0"
         classes="mr-5"
         styles={repeatButtonStyle}
-        iconName={repeat === "once" ? "repeatOnce": "repeat"}
+        iconName={repeat === "once" ? "repeatOnce" : "repeat"}
         onClick={onRepeat} />}
       {props.videoPlayer}
     </div>
