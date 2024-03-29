@@ -1,6 +1,6 @@
 {
   "name": "@kbthedeveloper/neumorph-player",
-  "version": "0.1.2",
+  "version": "0.1.6",
   "description": "Neumorph Player",
   "main": "src/index.ts",
   "types": "dist/types/index.d.ts",
