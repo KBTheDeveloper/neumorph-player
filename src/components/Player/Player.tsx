@@ -10,6 +10,8 @@ import { PlayerProps, TPlayerState } from "./types";
 import VideoPlayer from "./VideoPlayer";
 import {shuffle} from "../../utils/array";
 const Playlist = lazy(() => import("./Playlist"));
+import Ripple from '../../components/Ripple';
+if (!customElements.get("ripple-element")) customElements.define("ripple-element", Ripple);
 const PlayerWrapperSC = styled.div(props => ({
   position: props.position,
   ...playerStyles
