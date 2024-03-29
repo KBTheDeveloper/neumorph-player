@@ -135,6 +135,7 @@ export const Track: React.FunctionComponent<TrackItem> = (props: TrackItem) => {
   const isPlay = play || (props.item.howl && !props.item.howl._sounds[0]._paused) ? pauseBtn : playBtn;
 
   return <TrackSC
+    data-testid="track"
     tabIndex="0"
     className={`playlist__item d-flex align-items--center pa-3 ${play ? 'playlist__item--is-playing' : ""}`}
     onDragOver={onDragOver}

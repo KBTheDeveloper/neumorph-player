@@ -63,15 +63,15 @@ export const TrackInfo: React.FunctionComponent<TrackInfoProps> = (props: TrackI
     requestAnimationFrameId = null;
   });
   return (
-    <TrackInfoSC>
+    <TrackInfoSC data-testid="track-info">
       <div className='track-info px-6 py-4 pl-xs-4 pr-xs-4'>
         <Grid>
           <Column cols={{ default: 12 }}>
             <div className="track-info d-flex">
               <div className="track-info__cover mr-2" style={{ backgroundImage: `url(${imagesPath + props.cover}` }}></div>
               <div className="d-flex flex-column">
-                <div className="track-info__name">{props.title}</div>
-                <div className="track-info__artist-name">{props.artist}</div>
+                <div data-testid="track-name" className="track-info__name">{props.title}</div>
+                <div data-testid="track-artist-name" className="track-info__artist-name">{props.artist}</div>
               </div>
               <div className="time d-inline-block ml-auto">
                 <span id="timer">{time}</span>

@@ -10,6 +10,7 @@ export type iconWrapperProps = {
   title?: string,
   role?: string,
   children?: React.ReactFragment,
+  disabled?: boolean,
   onClick?: Function,
   onKeyPress?: Function,
 };

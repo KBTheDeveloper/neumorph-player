@@ -127,9 +127,9 @@ export const Volume: React.FunctionComponent<VolumeProps> = React.memo((props: V
     }
   }, []);
   const getVolume = () => {
-    const volume =  window.localStorage.getItem("player_settings") 
-    ? JSON.parse(window.localStorage.getItem("player_settings"))?.settings?.volume / 100
-    : props.level / 100;
+    const volume = window.localStorage.getItem("player_settings")
+      ? JSON.parse(window.localStorage.getItem("player_settings"))?.settings?.volume / 100
+      : props.level / 100;
     return mute ? 0 : volume;
   };
   React.useEffect(() => {
@@ -158,6 +158,7 @@ export const Volume: React.FunctionComponent<VolumeProps> = React.memo((props: V
   const muted = mute ? 'volume--muted' : "";
   return (
     <VolumeSC
+      data-testid="volume"
       theme={props.theme}
       ref={volumeBtnRef}
       className={`volumeBtn btn btn--volume ml-auto`}
@@ -189,7 +190,7 @@ export const Volume: React.FunctionComponent<VolumeProps> = React.memo((props: V
           viewBox: "0 0 25 25"
         }}
         noAlign={true}
-        iconName={mute ? "mute" : icon}/>
+        iconName={mute ? "mute" : icon} />
     </VolumeSC>
   );
 });

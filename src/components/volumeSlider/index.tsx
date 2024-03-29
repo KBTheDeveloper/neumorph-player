@@ -206,6 +206,7 @@ const RangeSlider: React.FunctionComponent<SliderProps> = React.memo((props: Sli
     : { height: `${percent}%` };
   return (
     <RangeSliderSC
+      data-testid="range-slider"
       tabIndex="0"
       onKeyDown={onKeyDown}
       theme={props.theme}

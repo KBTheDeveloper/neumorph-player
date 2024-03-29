@@ -45,7 +45,7 @@ let trackIsMounted: null | Howl;
 export const Progress: React.FunctionComponent<IProgress> = memo((props: IProgress) => {
   const progress = useRef<HTMLDivElement>(null);
   const lineRef = useRef<SVGRectElement | null>(null);
-  const {howl} = props.track.source;
+  const sound =  props.track.source.howl;
   const [tooltip, setTooltip] = useState({
     show: false,
     text: "",
@@ -54,23 +54,22 @@ export const Progress: React.FunctionComponent<IProgress> = memo((props: IProgre
 
   const showTime = (per: number) => {
     // Convert the percent into a seek position.
-    if (howl) {
-      return formatTime(howl.duration() * per).replace(/\.\d+/, "");
+    if (sound) {
+      return formatTime(sound.duration() * per).replace(/\.\d+/, "");
     }
   };
   /**
 * Seek to a new position in the currently playing track.
 * @param  {Number} per Percentage through the song to skip.
 */
-  const seek = useCallback(function(event) {
-    if (!trackIsMounted) return;
+  const seek = useCallback(function (event) {
+    if (!sound) return;
     const { x } = progress.current.getBoundingClientRect();
     const per = (event.clientX - x) / progress.current.offsetWidth;
-    howl.seek(howl.duration() * per);
-  }, [howl]);
+    sound.seek(sound.duration() * per);
+  }, [sound]);
   const onMouseMove = useCallback((event) => {
-    trackIsMounted = props.track.source.howl;
-    if (!trackIsMounted) return;
+    if (!sound) return;
     const { x, y } = progress.current.getBoundingClientRect();
     setTooltip(state => ({
       ...state,
@@ -79,15 +78,15 @@ export const Progress: React.FunctionComponent<IProgress> = memo((props: IProgre
     }));
   }, [tooltip]);
   const onMouseOver = useCallback(() => {
-    if (!trackIsMounted) return;
+    if (!sound) return;
     setTooltip(state => ({ ...state, show: true }));
   },[tooltip]);
   const onMouseOut = useCallback(() => {
     if (!trackIsMounted) return;
     setTooltip(state => ({ ...state, show: false }));
-  }, []);
+  }, [tooltip]);
   useEffect(() => {
-    requestAnimationFrameId = requestAnimationFrame(step.bind(null, howl, lineRef?.current));
+    requestAnimationFrameId = requestAnimationFrame(step.bind(null, sound, lineRef?.current));
     return function cleanup() {
       window.cancelAnimationFrame(requestAnimationFrameId);
     }
@@ -95,6 +94,7 @@ export const Progress: React.FunctionComponent<IProgress> = memo((props: IProgre
 
   return (
     <ProgressSC id="progress"
+      data-testid="progress"
       theme={props.theme}
       role="progressbar"
       className="progress mt-4"

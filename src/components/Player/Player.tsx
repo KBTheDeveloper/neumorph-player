@@ -7,6 +7,8 @@ import { formatTime, lazy } from '../../utils/helpers';
 import styled from "styled-components";
 import { buttonStyles, playerStyles as playerThemes } from "./styles/themes";
 import { PlayerProps, TPlayerState } from "./types";
+import VideoPlayer from "./VideoPlayer";
+import {shuffle} from "../../utils/array";
 const Playlist = lazy(() => import("./Playlist"));
 const PlayerWrapperSC = styled.div(props => ({
   position: props.position,
@@ -32,6 +34,7 @@ const updatedTracks = (array, index, howl) => {
 };
 
 export default class Player extends React.Component<PlayerProps, TPlayerState> {
+  public videoPlayerRef: React.RefObject<HTMLVideoElement>;
   constructor(props) {
     super(props);
     this.state = {
@@ -49,7 +52,9 @@ export default class Player extends React.Component<PlayerProps, TPlayerState> {
       settings: {
         volume: +JSON.parse(window.localStorage.getItem("player_settings"))?.settings?.volume / 100 || 0.5,
         muted: false,
-        showSlider: false
+        showSlider: false,
+        shuffle: false,
+        repeat: "off"
       }
     };
     this.play = this.play.bind(this);
@@ -59,6 +64,9 @@ export default class Player extends React.Component<PlayerProps, TPlayerState> {
     this.stop = this.stop.bind(this);
     this.onClosePlaylist = this.onClosePlaylist.bind(this);
     this.togglePlaylist = this.togglePlaylist.bind(this);
+    this.toggleShuffle = this.toggleShuffle.bind(this);
+    this.onRepeat = this.onRepeat.bind(this);
+    this.videoPlayerRef = React.createRef();
   }
 
   componentWillUnmount(): void {
@@ -79,9 +87,10 @@ export default class Player extends React.Component<PlayerProps, TPlayerState> {
   };
 
   skip(direction: string) {
+    let index;
     const { track, tracks } = this.state;
     const trackIndex = tracks.findIndex(item => item.id === track.source.id);
-    const index = direction === "next" ? (trackIndex + 1 > tracks.length - 1 ?
+    index = direction === "next" ? (trackIndex + 1 > tracks.length - 1 ?
       0 : trackIndex + 1) : (trackIndex - 1 < 0 ? tracks.length - 1 : trackIndex - 1);
     const howl = getPlayingTrack(tracks);
     /**
@@ -93,10 +102,12 @@ export default class Player extends React.Component<PlayerProps, TPlayerState> {
     const clearedTracks = resetHowls(tracks);
     const newTrack = this.createAudioTrack(clearedTracks[index]);
     newTrack.play();
+    if (this.videoPlayerRef) this.videoPlayerRef.current?.play();
+    const updTracks = updatedTracks(clearedTracks, index, newTrack);
     this.setState((state: TPlayerState) => ({
       ...state,
       tracks: [
-        ...updatedTracks(clearedTracks, index, newTrack)
+        ...updTracks
       ],
       track: {
         ...state.track,
@@ -105,7 +116,7 @@ export default class Player extends React.Component<PlayerProps, TPlayerState> {
         percent: 0,
         index,
         source: {
-          ...clearedTracks[index],
+          ...updTracks[index],
           howl: newTrack
         }
       }
@@ -146,17 +157,24 @@ export default class Player extends React.Component<PlayerProps, TPlayerState> {
         }));
       },
       onend: function () {
-        if (self.state.track.source.id < self.state.tracks.length) self.skip('next');
-        else self.stop();
+        if (self.state.settings.repeat === "once") { self.play(true, self.state.track.source.id); }
+        else if (self.state.track.source.id === self.state.tracks.length && self.state.settings.repeat === "off") { self.stop(); }
+        else if (self.state.settings.shuffle) self.play(true, shuffle(self.state.tracks)[0].id);
+        else self.skip('next');
+      },
+      onseek: function () {
+        if (self.videoPlayerRef.current) {
+          self.videoPlayerRef.current.currentTime = this._sounds[0]._seek;
+        }
       }
     });
     return howl;
   }
 
   play(value, id) {
-    console.log("track: ", id);
     let tracksArr = this.state.tracks;
     const { track, tracks } = this.state;
+    if (this.videoPlayerRef.current!) this.videoPlayerRef?.current.play();
     const playingTrack = getPlayingTrack(tracks);
     if (playingTrack?.id !== id) {
       playingTrack?.howl?.stop();
@@ -177,18 +195,13 @@ export default class Player extends React.Component<PlayerProps, TPlayerState> {
         play: value,
         // loading: sound.howl?.state() === 'loaded' ? false : true,
         source: sound,
-        duration: formatTime(Math.round(sound.howl.duration()))
+        duration: formatTime(Math.round(sound.howl?.duration()))
       }
     }));
-    // Begin playing the sound.
-
-    // Show the pause button.
   }
-  /**
-* Pause the currently playing track.
-*/
+
   pause(value: boolean, id: number) {
-    // Get the Howl we want to manipulate.
+    // Get the sound we want to manipulate.
     const { howl } = id ? getTrackById(this.state.tracks, id) : this.state.track.source;
     // Pause the sound.
     this.setState((state: TPlayerState) => ({
@@ -199,6 +212,7 @@ export default class Player extends React.Component<PlayerProps, TPlayerState> {
       }
     }));
     howl.pause();
+    if (this.videoPlayerRef.current!) this.videoPlayerRef?.current.pause();
   }
   onTrackChange(value, id) {
     if (value) this.play(value, id || null);
@@ -212,6 +226,12 @@ export default class Player extends React.Component<PlayerProps, TPlayerState> {
     this.setState(state => ({ ...state, playlist: value }));
   };
 
+  toggleShuffle() {
+    this.setState((state: TPlayerState) => ({ ...state, settings: { ...state.settings, shuffle: !state.settings.shuffle } }));
+  }
+  onRepeat(value) {
+    this.setState(state => ({ ...state, settings: { ...state.settings, repeat: value } }))
+  }
   render() {
     const position = this.props.position || "fixed";
     const { theme } = this.props;
@@ -226,7 +246,7 @@ export default class Player extends React.Component<PlayerProps, TPlayerState> {
         <div className="container">
           <div className="grid">
             <div className="grid__col-12 mb-0">
-              <PlayerSC theme={theme} className="player">
+              <PlayerSC data-testid="player" theme={theme} className="player">
                 <TrackInfo
                   title={track.source.title}
                   cover={track.source.cover}
@@ -254,7 +274,10 @@ export default class Player extends React.Component<PlayerProps, TPlayerState> {
                       onSkip={this.skip}
                       onPlay={this.onTrackChange}
                       playback={playback}
-                      onPause={this.onTrackChange} />
+                      onPause={this.onTrackChange}
+                      videoPlayer={<VideoPlayer ref={this.videoPlayerRef} sound={track.source.howl} url={track?.source?.video} theme={theme} />}
+                      onShuffle={this.toggleShuffle}
+                      onRepeat={this.onRepeat} />
                     <Volume
                       level={settings.volume}
                       theme={theme}

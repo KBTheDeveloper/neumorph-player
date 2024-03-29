@@ -13,7 +13,8 @@ export const App: React.FunctionComponent = (props: any) => {
       filename: "Chronoks - demo song 1.mp3",
       id: 1,
       howl: null,
-      cover: "demo_song_placeholder_1.png"
+      cover: "demo_song_placeholder_1.png",
+      video: "src/assets/video/100_0001.mov"
     },
     {
       title: "Demo Song 2",
