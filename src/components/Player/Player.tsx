@@ -7,7 +7,10 @@ import { formatTime, lazy } from "../../utils/helpers";
 import styled from "styled-components";
 import { buttonStyles, playerStyles as playerThemes } from "./styles/themes";
 import { PlayerProps, TPlayerState, TrackType } from "./types";
-import VideoPlayer from "./VideoPlayer";
+/***
+ * To-Do: finalize and add video player feature to the next release 0.1.7
+ */
+// import VideoPlayer from "./VideoPlayer";
 import { shuffle } from "../../utils/array";
 const Playlist = lazy(() => import("./Playlist"));
 import Ripple from "../../components/Ripple";
@@ -36,7 +39,7 @@ const updatedTracks = (array, index, howl) => {
 };
 
 class Player extends React.Component<PlayerProps, TPlayerState> {
-  public videoPlayerRef: React.RefObject<HTMLVideoElement>;
+  // public videoPlayerRef: React.RefObject<HTMLVideoElement>;
   constructor(props) {
     super(props);
     this.state = {
@@ -68,7 +71,7 @@ class Player extends React.Component<PlayerProps, TPlayerState> {
     this.togglePlaylist = this.togglePlaylist.bind(this);
     this.toggleShuffle = this.toggleShuffle.bind(this);
     this.onRepeat = this.onRepeat.bind(this);
-    this.videoPlayerRef = React.createRef();
+    // this.videoPlayerRef = React.createRef();
   }
 
   componentWillUnmount(): void {
@@ -109,7 +112,7 @@ class Player extends React.Component<PlayerProps, TPlayerState> {
     const clearedTracks = this.state.settings.shuffle ? shuffle(resetHowls(tracks)) : resetHowls(tracks);
     const newTrack = this.createAudioTrack(clearedTracks[index]);
     newTrack.play();
-    if (this.videoPlayerRef) this.videoPlayerRef.current?.play();
+    //if (this.videoPlayerRef) this.videoPlayerRef.current?.play();
     const updTracks = updatedTracks(clearedTracks, index, newTrack);
     this.setState((state: TPlayerState) => ({
       ...state,
@@ -171,9 +174,9 @@ class Player extends React.Component<PlayerProps, TPlayerState> {
         else self.skip("next");
       },
       onseek: function () {
-        if (self.videoPlayerRef.current) {
-          self.videoPlayerRef.current.currentTime = this._sounds[0]._seek;
-        }
+        // if (self.videoPlayerRef.current) {
+        //   self.videoPlayerRef.current.currentTime = this._sounds[0]._seek;
+        // }
       },
     });
     return howl;
@@ -182,7 +185,7 @@ class Player extends React.Component<PlayerProps, TPlayerState> {
   play(value, id) {
     let tracksArr = this.state.tracks;
     const { track, tracks } = this.state;
-    if (this.videoPlayerRef.current!) this.videoPlayerRef?.current.play();
+    // if (this.videoPlayerRef.current!) this.videoPlayerRef?.current.play();
     const playingTrack = getPlayingTrack(tracks);
     if (playingTrack?.id !== id) {
       playingTrack?.howl?.stop();
@@ -220,7 +223,7 @@ class Player extends React.Component<PlayerProps, TPlayerState> {
       },
     }));
     howl.pause();
-    if (this.videoPlayerRef.current!) this.videoPlayerRef?.current.pause();
+    // if (this.videoPlayerRef.current!) this.videoPlayerRef?.current.pause();
   }
   onTrackChange(value, id) {
     if (value) this.play(value, id || null);
@@ -288,14 +291,14 @@ class Player extends React.Component<PlayerProps, TPlayerState> {
                         onPlay={this.onTrackChange}
                         playback={playback}
                         onPause={this.onTrackChange}
-                        videoPlayer={
-                          <VideoPlayer
-                            ref={this.videoPlayerRef}
-                            sound={track.source.howl}
-                            url={track?.source?.video}
-                            theme={theme}
-                          />
-                        }
+                        // videoPlayer={
+                        //   <VideoPlayer
+                        //     ref={this.videoPlayerRef}
+                        //     sound={track.source.howl}
+                        //     url={track?.source?.video}
+                        //     theme={theme}
+                        //   />
+                        // }
                         onShuffle={this.toggleShuffle}
                         onRepeat={this.onRepeat}
                       />
