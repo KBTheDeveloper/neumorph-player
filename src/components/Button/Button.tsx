@@ -1,4 +1,4 @@
-import React from "react";
+import React, { RefObject } from "react";
 import { mixins } from "../../styles/jss/mixins";
 import { appPalette } from "../../utils/guides";
 import styled from "styled-components";
@@ -119,7 +119,8 @@ const rippleProps = [
   { name: "left", value: "offsetLeft" },
   { name: "top", value: "offsetTop" },
 ];
-export const Button = React.forwardRef((props: ButtonProps) => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const Button = React.forwardRef((props: ButtonProps, ref: RefObject<HTMLButtonElement>) => {
   const onClick = (e) => {
     if (props.clickHandler) {
       props.clickHandler(e);
