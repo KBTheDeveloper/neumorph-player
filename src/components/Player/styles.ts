@@ -1,13 +1,13 @@
-import { breakpoints } from '../../components/Grid/Grid';
-import { keyFrames } from './../../../src/styles/jss/keyframes';
+import { breakpoints } from "../../components/Grid/Grid";
+import { keyFrames } from "./../../../src/styles/jss/keyframes";
 
 import { appPalette } from "../../utils/guides";
-import { mixins } from '../../styles/jss/mixins';
+import { mixins } from "../../styles/jss/mixins";
 const stylesInst = {
   "@keyframes fadeIn": keyFrames["@keyframes fadeIn"],
   "@keyframes fadeOut": keyFrames["@keyframes fadeOut"],
   ".controlsInner": {
-    width: "100%"
+    width: "100%",
   },
   "&.playerWrapper": {
     bottom: 0,
@@ -16,7 +16,7 @@ const stylesInst = {
     transition: "all .2s",
     transitionTimingFunction: "cubic-bezier(0.18, 0.89, 0.1, 1.04)",
     "&.hidden": {
-      "& [class*=playerCurtain]" : {
+      "& [class*=playerCurtain]": {
         visibility: "visible",
         transform: "translate(-50%, 0)",
       },
@@ -24,7 +24,7 @@ const stylesInst = {
       transitionTimingFunction: "ease-out",
     },
     "&:hover": {
-      "& > [class*=Player-playerCurtain]" : {
+      "& > [class*=Player-playerCurtain]": {
         visibility: "visible",
         transform: "translate(-50%, 0)",
       },
@@ -44,25 +44,23 @@ const stylesInst = {
     borderTopLeftRadius: "50%",
     transition: "all .1s ease-in-out",
     ...mixins.neuMorphismShadow(),
-    ...mixins.neuMorphGradient({first: appPalette.darkPurple, second: appPalette.darkPurple}, true),
+    ...mixins.neuMorphGradient({ first: appPalette.darkPurple, second: appPalette.darkPurple }, true),
     cursor: "pointer",
-    "& [class*=iconWrapper]": {
-      
-    }
+    "& [class*=iconWrapper]": {},
   },
   ".iconWrapper": {
     width: "30px !important",
-    height: "30px !important"
+    height: "30px !important",
   },
   [`@media${breakpoints.xs}`]: {
     ".player": {
-      height: 145
-    }
+      height: 145,
+    },
   },
   ".volumeSlider": {
     minWidth: 250,
-    writingMode: "bt-lr", /* IE */
-    "-webkit-appearance": "none", /* Chromium */
+    writingMode: "bt-lr" /* IE */,
+    "-webkit-appearance": "none" /* Chromium */,
     width: "100%",
     height: 10,
     borderRadius: 5,
@@ -78,7 +76,7 @@ const stylesInst = {
       cursor: "pointer",
       // marginLeft: -5,
       /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
-      boxShadow: `0px 0px 5px ${appPalette.orange}, 0px 0px 1px ${appPalette.orange}`/* Add cool effects to your sliders! */
+      boxShadow: `0px 0px 5px ${appPalette.orange}, 0px 0px 1px ${appPalette.orange}` /* Add cool effects to your sliders! */,
     },
     "&::-ms-track": {
       width: "100%",
@@ -90,14 +88,13 @@ const stylesInst = {
       color: "transparent",
       // border-radius: @track-radius;
       // border: @track-border-width solid @track-border-color;
-    }
+    },
   },
   ".sliderBtn": {
     "&.toggled": {
       boxShadow: `0px 0px 0px 4px rgb(${appPalette.orangeRgb}) !important`,
     },
-    transition: "all .3s ease"
+    transition: "all .3s ease",
   },
-
 };
 export const playerStyles = stylesInst;

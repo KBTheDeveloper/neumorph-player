@@ -6,4 +6,4 @@ const shuffle = <T>(array: T[]) => {
   return array;
 };
 
-export { shuffle }
+export { shuffle };

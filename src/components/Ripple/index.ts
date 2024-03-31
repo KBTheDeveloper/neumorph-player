@@ -8,17 +8,16 @@ class Ripple extends HTMLElement {
   }
 
   attributeChangeCallback(name, oldValue, newValue) {
-    this[name]=  newValue;
+    this[name] = newValue;
     this._updateRendering();
   }
-  
+
   connectedCallback() {
     this._updateRendering();
   }
-   
 
   _updateRendering() {
-    const shadow = this.attachShadow({mode: "open"});
+    const shadow = this.attachShadow({ mode: "open" });
     const diameter = Math.max(+this.getAttribute("width"), +this.getAttribute("height"));
 
     const radius = diameter / 2;

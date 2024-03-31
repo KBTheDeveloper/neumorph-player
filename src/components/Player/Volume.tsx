@@ -1,12 +1,12 @@
 import React, { useCallback } from "react";
 import RangeSlider from "../volumeSlider";
-import styled from 'styled-components';
+import styled from "styled-components";
 import { buttonStyles, volumeStyles } from "./styles/themes";
 import { keyFrames } from "../../styles/jss/keyframes";
 import { VolumeProps } from "./types";
 import { IconWrapper } from "../Icon/IconWrapper";
 
-const VolumeSC = styled.button(props => ({
+const VolumeSC = styled.button((props) => ({
   "@keyframes fadeInVolume": keyFrames["@keyframes fadeIn"]("bottom", 60),
   "@keyframes fadeoutVolume": keyFrames["@keyframes fadeOut"]("bottom", 60),
   "&.volumeBtn": {
@@ -27,11 +27,11 @@ const VolumeSC = styled.button(props => ({
       display: "none",
       position: "absolute",
       bottom: 0,
-      left: 0
+      left: 0,
     },
     "&.hidden": {
       "& .volume": {
-        animation: "fadeoutVolume ease .4s"
+        animation: "fadeoutVolume ease .4s",
       },
     },
     "&.visible": {
@@ -42,11 +42,11 @@ const VolumeSC = styled.button(props => ({
       },
       "&:before": {
         display: "block",
-      }
+      },
     },
     "& svg": {
-      cursor: "pointer"
-    }
+      cursor: "pointer",
+    },
   },
   ".volume": {
     borderRadius: 5,
@@ -68,7 +68,7 @@ const VolumeSC = styled.button(props => ({
     cursor: "not-allowed",
     "& .range-slider": {
       pointerEvents: "none",
-    }
+    },
   },
 }));
 export const Volume: React.FunctionComponent<VolumeProps> = React.memo((props: VolumeProps) => {
@@ -81,16 +81,15 @@ export const Volume: React.FunctionComponent<VolumeProps> = React.memo((props: V
   const showSlider = () => {
     volumeBtnRef.current.classList.remove("hidden");
     volumeBtnRef.current.classList.add("visible");
-  }
+  };
   const hideSlider = () => {
     volumeBtnRef.current.classList.remove("visible");
-    volumeBtnRef.current.classList.add("hidden")
-  }
+    volumeBtnRef.current.classList.add("hidden");
+  };
   const onMouseOut = useCallback((e) => {
     const { relatedTarget } = e;
-    const target = e.target.closest('.volume');
-    if ((!target || !target.contains(relatedTarget) && !isMouseDown)
-      && e.pointerType === "mouse") {
+    const target = e.target.closest(".volume");
+    if ((!target || (!target.contains(relatedTarget) && !isMouseDown)) && e.pointerType === "mouse") {
       hideSlider();
     }
   }, []);
@@ -105,15 +104,18 @@ export const Volume: React.FunctionComponent<VolumeProps> = React.memo((props: V
       showSlider();
     }
     setSlider(!slider);
-  }, []);
-  const onVolumeChange = useCallback((value) => {
-    if (!mute) {
-      window.localStorage.setItem('player_settings', JSON.stringify({ settings: { volume: value } }));
-    }
-    const icon = value > 50 ? "volumeHigh" : value === 0 ? "mute" : "volumeMedium";
-    setIcon(icon);
-    (window as any).Howler.volume(value / 100);
-  }, [mute]);
+  }, [slider]);
+  const onVolumeChange = useCallback(
+    (value) => {
+      if (!mute) {
+        window.localStorage.setItem("player_settings", JSON.stringify({ settings: { volume: value } }));
+      }
+      const icon = value > 50 ? "volumeHigh" : value === 0 ? "mute" : "volumeMedium";
+      setIcon(icon);
+      (window as any).Howler.volume(value / 100);
+    },
+    [mute],
+  );
   const onVolumeClick = useCallback((event) => {
     const found = event.target.classList.contains("volumeBtn");
     if (found && event.pointerType === "mouse") {
@@ -135,7 +137,7 @@ export const Volume: React.FunctionComponent<VolumeProps> = React.memo((props: V
   React.useEffect(() => {
     const fader = volumeRef.current.querySelector(".range-slider__thumb");
     (window as any).Howler.volume(getVolume());
-    const onMouseDown = (e) => {
+    const onMouseDown = () => {
       setIsMouseDown(true);
 
       document.addEventListener("pointerup", onMouseUp);
@@ -149,16 +151,16 @@ export const Volume: React.FunctionComponent<VolumeProps> = React.memo((props: V
         }
         document.removeEventListener("pointerup", onMouseUp);
       }
-    }
+    };
     fader.addEventListener("pointerdown", onMouseDown);
     return function cleanup() {
       fader.removeEventListener("pointerdown", onMouseDown);
-    }
+    };
   }, []);
-  const muted = mute ? 'volume--muted' : "";
+  const muted = mute ? "volume--muted" : "";
   return (
     <VolumeSC
-      data-testid="volume"
+      data-testid='volume'
       theme={props.theme}
       ref={volumeBtnRef}
       className={`volumeBtn btn btn--volume ml-auto`}
@@ -166,31 +168,36 @@ export const Volume: React.FunctionComponent<VolumeProps> = React.memo((props: V
       onPointerDown={onVolumeClick}
       onKeyPress={toggleSlider}
       onPointerEnter={onPointerOver}
-      onPointerOut={onMouseOut}>
+      onPointerOut={onMouseOut}
+    >
       <div
-        id="volume"
+        id='volume'
         ref={volumeRef}
-        className={`volume fadeout d-flex justify-center align-items--center${muted} py-5`}>
+        className={`volume fadeout d-flex justify-center align-items--center${muted} py-5`}
+      >
         <RangeSlider
           theme={props.theme}
-          view="round-vertical"
-          color="orange"
-          orientation="vertical"
+          view='round-vertical'
+          color='orange'
+          orientation='vertical'
           onChange={onVolumeChange}
           sizes={{ width: 10 }}
           start={getVolume()}
           min={0}
-          max={100} />
+          max={100}
+        />
       </div>
       <IconWrapper
-        title="Volume"
+        title='Volume'
         sizes={{
           width: 25,
           height: 25,
-          viewBox: "0 0 25 25"
+          viewBox: "0 0 25 25",
         }}
         noAlign={true}
-        iconName={mute ? "mute" : icon} />
+        iconName={mute ? "mute" : icon}
+      />
     </VolumeSC>
   );
 });
+Volume.displayName = "Volume";

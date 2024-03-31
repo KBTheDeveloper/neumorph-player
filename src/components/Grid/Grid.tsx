@@ -1,15 +1,15 @@
-import React, {memo} from "react";
-import styled from 'styled-components';
+import React, { memo } from "react";
+import styled from "styled-components";
 import { Breakpoints } from "./types";
 
 type TGrid = {
   align?: {
-    vertical?: Breakpoints,
-    horizontal?: Breakpoints,
-  },
-  dir?: string,
-  wrap?: string,
-  children: any,
+    vertical?: Breakpoints;
+    horizontal?: Breakpoints;
+  };
+  dir?: string;
+  wrap?: string;
+  children: any;
 };
 const aligns = {
   horizontal: {
@@ -20,7 +20,7 @@ const aligns = {
     around: "space-around",
     evenly: "space-evenly",
     stretch: "stretch",
-    unset: "unset"
+    unset: "unset",
   },
   vertical: {
     start: "start",
@@ -29,16 +29,16 @@ const aligns = {
     "flex-start": "flex-start",
     "flex-end": "flex-end",
     stretch: "stretch",
-    unset: "unset"
-  }
+    unset: "unset",
+  },
 };
 
 export const breakpoints = {
-  xs: '(max-width: 576px)',
-  sm: '(min-width: 576px) and (max-width: 767.98px)',
-  md: '(min-width: 768px) and (max-width: 1199.98px)',
-  lg: '(min-width: 1200px) and (max-width: 1399.98px)',
-  xl: '(min-width: 1400px)'
+  xs: "(max-width: 576px)",
+  sm: "(min-width: 576px) and (max-width: 767.98px)",
+  md: "(min-width: 768px) and (max-width: 1199.98px)",
+  lg: "(min-width: 1200px) and (max-width: 1399.98px)",
+  xl: "(min-width: 1400px)",
 };
 const createAlignObject = (props: any, axis: string) => {
   const alignObject = { xl: "unset" };
@@ -50,15 +50,20 @@ const createAlignObject = (props: any, axis: string) => {
   return alignObject;
 };
 const createMediaQueries = (props, propName) => {
-  return typeof props === "object" ? Object.entries(props).map(([key, value]: [string, string]) => {
-    if (value !== "unset") return `@media${breakpoints[key]}{\n ${propName}: ${aligns.horizontal[value]}; \n}; \n`
-  }).join("") : "";
+  return typeof props === "object"
+    ? Object.entries(props)
+        .map(([key, value]: [string, string]) => {
+          if (value !== "unset")
+            return `@media${breakpoints[key]}{\n ${propName}: ${aligns.horizontal[value]}; \n}; \n`;
+        })
+        .join("")
+    : "";
 };
 export const gridOptions = { gutter: 15 };
-const GridSC = styled.div(props => {
+const GridSC = styled.div((props) => {
   const defaultAligns = {
     vertical: createAlignObject(props.align.vertical, "vertical"),
-    horizontal: createAlignObject(props.align.horizontal, "horizontal")
+    horizontal: createAlignObject(props.align.horizontal, "horizontal"),
   };
   const defaultDir = props.dir || "row";
   const defaultWrap = props.dir || "wrap";
@@ -76,21 +81,22 @@ const GridSC = styled.div(props => {
 });
 
 const Grid: React.FunctionComponent<TGrid> = (props: any) => {
-  let classes = "grid";
+  const classes = "grid";
   const horizontal = props.align?.horizontal || { xl: "offset" };
   const vertical = props.align?.vertical || { xl: "offset" };
   return (
     <GridSC
       align={{
         horizontal,
-        vertical
+        vertical,
       }}
       dir={props.dir}
       wrap={props.wrap}
-      className={classes}>
+      className={classes}
+    >
       {props.children}
     </GridSC>
   );
-}
+};
 
 export default memo(Grid);

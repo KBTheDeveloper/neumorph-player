@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Icon } from "./Icon";
 import { iconWrapperProps } from "./types";
 
-const IconWrapperSC = styled.div(props => ({
+const IconWrapperSC = styled.div((props) => ({
   display: "flex",
   flexFlow: "row wrap",
   alignItems: "center",
@@ -11,12 +11,12 @@ const IconWrapperSC = styled.div(props => ({
   borderRadius: "50%",
   width: props.width || 40,
   height: props.height || 40,
-  ...props.onClick && { cursor: "pointer" },
+  ...(props.onClick && { cursor: "pointer" }),
   ...props.customStyle,
-  ...props.disabled && {
-    pointerEvents: 'none',
-    opacity: .6
-  }
+  ...(props.disabled && {
+    pointerEvents: "none",
+    opacity: 0.6,
+  }),
 }));
 
 export const IconWrapper: React.FunctionComponent<iconWrapperProps> = function (props: iconWrapperProps) {
@@ -24,8 +24,18 @@ export const IconWrapper: React.FunctionComponent<iconWrapperProps> = function (
   const height = props.sizes?.height ?? "25";
   const width = props.sizes?.width ?? "25";
   const vb = props.sizes?.viewBox ?? null;
-  const icon = props.icon ? <Icon width={width} height={height} color={props.color} icon={props.icon} iconName={null} /> :
-    <Icon width={width} viewBox={vb} height={height} color={props.color} noAlign={props.noAlign} iconName={props.iconName} />;
+  const icon = props.icon ? (
+    <Icon width={width} height={height} color={props.color} icon={props.icon} iconName={null} />
+  ) : (
+    <Icon
+      width={width}
+      viewBox={vb}
+      height={height}
+      color={props.color}
+      noAlign={props.noAlign}
+      iconName={props.iconName}
+    />
+  );
   const classes = props.classes || "";
   return (
     <React.Fragment>
@@ -39,9 +49,10 @@ export const IconWrapper: React.FunctionComponent<iconWrapperProps> = function (
         disabled={props.disabled}
         height={props.sizes?.height}
         className={`${classes} ${customStyles}`}
-        onKeyPress={props.onKeyPress}>
+        onKeyPress={props.onKeyPress}
+      >
         {icon}
       </IconWrapperSC>
     </React.Fragment>
   );
-}
+};

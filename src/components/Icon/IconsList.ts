@@ -26,8 +26,8 @@ import {
   mdiFullscreen,
   mdiShuffle,
   mdiRepeat,
-  mdiRepeatOnce
-} from '@mdi/js';
+  mdiRepeatOnce,
+} from "@mdi/js";
 
 export const iconsList = {
   arrowDown: mdiArrowDown,
@@ -57,5 +57,5 @@ export const iconsList = {
   fullScreen: mdiFullscreen,
   shuffle: mdiShuffle,
   repeat: mdiRepeat,
-  repeatOnce: mdiRepeatOnce
+  repeatOnce: mdiRepeatOnce,
 };

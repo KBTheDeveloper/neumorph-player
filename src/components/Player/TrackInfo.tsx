@@ -24,11 +24,11 @@ const TrackInfoSC = styled.div({
     paddingRight: 20,
   },
   ".track-info__artist-name": {
-    fontWeight: 300
+    fontWeight: 300,
   },
   [`@media${breakpoints.xs}`]: {
     ".time": {
-      fontSize: 16
+      fontSize: 16,
     },
     ".track-info__name, .track-info__artist-name": {
       fontSize: 14,
@@ -37,15 +37,16 @@ const TrackInfoSC = styled.div({
       width: 40,
       height: 40,
     },
-  }
+  },
 });
-let requestAnimationFrameId;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+let requestAnimationFrameId: number;
 const imagesPath = process.env.NODE_ENV === "development" ? "src/assets/img/" : "";
 export const TrackInfo: React.FunctionComponent<TrackInfoProps> = (props: TrackInfoProps) => {
   const [time, setTime] = useState("0:00");
   /**
-* The step called within requestAnimationFrame to update the playback position.
-*/
+   * The step called within requestAnimationFrame to update the playback position.
+   */
   const step = function (context) {
     // Get the Howl we want to manipulate.
     const sound = context;
@@ -59,24 +60,34 @@ export const TrackInfo: React.FunctionComponent<TrackInfoProps> = (props: TrackI
       requestAnimationFrameId = requestAnimationFrame(step.bind(null, props.track));
     }
   }, [props.track]);
-  useEffect(() => function cleanup() {
-    requestAnimationFrameId = null;
-  });
+  useEffect(
+    () =>
+      function cleanup() {
+        requestAnimationFrameId = null;
+      },
+  );
   return (
-    <TrackInfoSC data-testid="track-info">
+    <TrackInfoSC data-testid='track-info'>
       <div className='track-info px-6 py-4 pl-xs-4 pr-xs-4'>
         <Grid>
           <Column cols={{ default: 12 }}>
-            <div className="track-info d-flex">
-              <div className="track-info__cover mr-2" style={{ backgroundImage: `url(${imagesPath + props.cover}` }}></div>
-              <div className="d-flex flex-column">
-                <div data-testid="track-name" className="track-info__name">{props.title}</div>
-                <div data-testid="track-artist-name" className="track-info__artist-name">{props.artist}</div>
+            <div className='track-info d-flex'>
+              <div
+                className='track-info__cover mr-2'
+                style={{ backgroundImage: `url(${imagesPath + props.cover}` }}
+              ></div>
+              <div className='d-flex flex-column'>
+                <div data-testid='track-name' className='track-info__name'>
+                  {props.title}
+                </div>
+                <div data-testid='track-artist-name' className='track-info__artist-name'>
+                  {props.artist}
+                </div>
               </div>
-              <div className="time d-inline-block ml-auto">
-                <span id="timer">{time}</span>
+              <div className='time d-inline-block ml-auto'>
+                <span id='timer'>{time}</span>
                 <span className='separator'> / </span>
-                <span id="duration">{props.duration}</span>
+                <span id='duration'>{props.duration}</span>
               </div>
             </div>
           </Column>
@@ -84,4 +95,4 @@ export const TrackInfo: React.FunctionComponent<TrackInfoProps> = (props: TrackI
       </div>
     </TrackInfoSC>
   );
-}
+};

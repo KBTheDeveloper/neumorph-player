@@ -2,7 +2,7 @@ import { Howl } from "howler";
 
 export interface IVideoPlayer {
   url: string | null;
-  sound: Howl,
+  sound: Howl;
   theme: string;
 }
 
