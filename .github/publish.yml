@@ -1,0 +1,29 @@
+  - name: Checkout
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    uses: actions/checkout@v3
+
+
+  - name: Setup Node
+    # Setup node environment
+    uses: actions/setup-node@v3
+    with:
+      # Node version. Run "node -v" to check the latest version
+      node-version: 20.x
+      registry-url: https://registry.npmjs.org/
+
+
+  - name: Install dependencies
+    run: npm && npm install
+
+
+  - name: Build
+    run: npm run build
+
+
+  - name: Publish
+    run: npm run publish
+
+
+    env:
+      # We need this to our NPM account
+      NODE_AUTH_TOKEN: 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
