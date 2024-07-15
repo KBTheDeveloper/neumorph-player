@@ -2,8 +2,8 @@ import "@testing-library/jest-dom";
 import * as React from "react";
 import { render, fireEvent, waitFor, cleanup } from "@testing-library/react";
 import Player from "../Player";
-import "../../../../utils/SVGMocks";
-import "../../../../utils/HowlerMock";
+import "@/utils/SVGMocks";
+import "@/utils/HowlerMock";
 
 const tracks = [
   {

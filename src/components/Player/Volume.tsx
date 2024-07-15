@@ -107,36 +107,41 @@ export const Volume: React.FunctionComponent<VolumeProps> = React.memo((props: V
   }, [slider]);
   const onVolumeChange = useCallback(
     (value) => {
-      if (!mute) {
-        window.localStorage.setItem("player_settings", JSON.stringify({ settings: { volume: value } }));
-      }
+      window.localStorage.setItem("player_settings", JSON.stringify({ settings: { volume: value } }));
       const icon = value > 50 ? "volumeHigh" : value === 0 ? "mute" : "volumeMedium";
       setIcon(icon);
-      (window as any).Howler.volume(value / 100);
+      window.Howler.volume(value / 100);
     },
     [mute],
   );
-  const onVolumeClick = useCallback((event) => {
-    const found = event.target.classList.contains("volumeBtn");
-    if (found && event.pointerType === "mouse") {
-      if ((window as any).Howler._muted) {
-        (window as any).Howler.mute(false);
-        setMute(false);
-      } else {
-        (window as any).Howler.mute(true);
-        setMute(true);
-      }
-    }
-  }, []);
   const getVolume = () => {
     const volume = window.localStorage.getItem("player_settings")
       ? JSON.parse(window.localStorage.getItem("player_settings"))?.settings?.volume / 100
       : props.level / 100;
     return mute ? 0 : volume;
   };
+  const onVolumeClick = useCallback(
+    (event) => {
+      const found = event.target.classList.contains("volumeBtn");
+      if (found && event.pointerType === "mouse") {
+        if (window.Howler._muted) {
+          if (getVolume() === 0) {
+            onVolumeChange(50);
+          }
+          window.Howler.mute(false);
+          setMute(false);
+        } else {
+          window.Howler.mute(true);
+          setMute(true);
+        }
+      }
+    },
+    [getVolume],
+  );
+
   React.useEffect(() => {
     const fader = volumeRef.current.querySelector(".range-slider__thumb");
-    (window as any).Howler.volume(getVolume());
+    window.Howler.volume(getVolume());
     const onMouseDown = () => {
       setIsMouseDown(true);
 

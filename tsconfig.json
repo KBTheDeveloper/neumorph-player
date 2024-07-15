@@ -9,6 +9,9 @@
   "rulesDirectory": [],
   "files": ["src/index.ts"],
   "compilerOptions": {
+    "paths": {
+      "@/*": ["./src/*"]
+    },
     "target": "es2022",
     "module": "esnext",
     "moduleResolution": "node",
@@ -33,7 +36,7 @@
     "incremental": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "outDir": "dist"
+    "outDir": "dist",
   },
   "ts-node": {
     // It is faster to skip typechecking.

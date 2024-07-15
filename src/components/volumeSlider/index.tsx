@@ -1,6 +1,6 @@
 import React from "react";
-import { appPalette } from "../../utils/guides";
-import { mixins } from "../../styles/jss/mixins";
+import { appPalette } from "@/utils/guides";
+import { mixins } from "@/styles/jss/mixins";
 import styled from "styled-components";
 import { volumeStyles } from "../Player/styles/themes";
 import { SliderProps } from "./types";

@@ -12,7 +12,6 @@ if (process.platform === "win32") {
   srcPath = dirname(fileURLToPath(import.meta.url)).replace("/configs/webpack", "/src");
   publicPath = dirname(fileURLToPath(import.meta.url)).replace("/configs/webpack", "");
 }
-console.log(publicPath);
 export default merge(commonConfig, {
   mode: "development",
   entry: [

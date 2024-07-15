@@ -102,13 +102,13 @@ class Player extends React.Component<PlayerProps, TPlayerState> {
         : trackIndex - 1 < 0
           ? tracks.length - 1
           : trackIndex - 1;
-    const howl = getPlayingTrack(tracks);
+    const currentTrack = getPlayingTrack(tracks);
     /**
      * Skip to the next or previous track.
      * @param  {String} direction 'next' or 'prev'.
      */
     // Get the next track based on the direction of the track.
-    if (howl) howl.howl.stop();
+    if (currentTrack) currentTrack.howl.stop();
     const clearedTracks = this.state.settings.shuffle ? shuffle(resetHowls(tracks)) : resetHowls(tracks);
     const newTrack = this.createAudioTrack(clearedTracks[index]);
     newTrack.play();
@@ -174,6 +174,7 @@ class Player extends React.Component<PlayerProps, TPlayerState> {
         else self.skip("next");
       },
       onseek: function () {
+        console.log("track time: ", this._sounds[0]._seek);
         // if (self.videoPlayerRef.current) {
         //   self.videoPlayerRef.current.currentTime = this._sounds[0]._seek;
         // }

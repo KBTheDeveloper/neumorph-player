@@ -1,4 +1,4 @@
-import { dirname } from "path";
+import { dirname, resolve } from "path";
 import { fileURLToPath } from "url";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
@@ -11,10 +11,12 @@ if (process.platform === "win32") {
   srcPath = dirname(fileURLToPath(import.meta.url)).replace("/configs/webpack", "/src");
   projectPath = dirname(fileURLToPath(import.meta.url)).replace("/configs/webpack", "");
 }
-
 export default {
   resolve: {
     extensions: [".js", ".ts", ".tsx"],
+    alias: {
+      "@": srcPath,
+    },
   },
   context: srcPath,
   module: {
