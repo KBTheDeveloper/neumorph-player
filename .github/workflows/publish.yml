@@ -8,6 +8,7 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
+    environment: neumorphPlayer
     steps:
       # Checkout project repository
       - uses: actions/checkout@v3
@@ -67,7 +68,7 @@ jobs:
       # Publish version to public repository
       - run: yarn publish --verbose --access public --tag ${{ env.RELEASE_TAG }}
         env:
-          NODE_AUTH_TOKEN: ${{ neumorphPlayer.secrets.NODE_AUTH_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
 
       # Push repository changes
       - name: Push changes to repository
