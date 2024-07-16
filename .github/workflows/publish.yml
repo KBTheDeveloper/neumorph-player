@@ -51,7 +51,7 @@ jobs:
       # Build changelog unreleased section with new version
       - name: "Build Changelog"
         id: build_changelog
-        uses: mikepenz/release-changelog-builder-action@{github.event.release.tag_name}
+        uses: mikepenz/release-changelog-builder-action@4
 
       # Commit changes
       - name: Commit CHANGELOG.md and package.json changes and create tag
