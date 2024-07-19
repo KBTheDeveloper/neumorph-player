@@ -27,7 +27,7 @@ export const Icon: React.FunctionComponent<iconProps> = (props: iconProps) => {
   const sizes = { width: props.width || 25, height: props.height || 25, viewBox: props.viewBox || defaultViewBox };
   const noAlign = !props.noAlign && { transform: `translate(${x}, ${y})` };
   const svg = props.iconName ? (
-    <svg width={sizes.width} height={sizes.height} fill={appPalette[defaultColor]} viewBox={sizes.viewBox}>
+    <svg width={sizes.width} height={sizes.height} fill={appPalette[defaultColor] as string} viewBox={sizes.viewBox}>
       <path {...noAlign} ref={pathRef} d={icon} />
     </svg>
   ) : (
@@ -35,5 +35,5 @@ export const Icon: React.FunctionComponent<iconProps> = (props: iconProps) => {
       <path {...noAlign} ref={pathRef} d={props.icon.d} />
     </svg>
   );
-  return <React.Fragment>{svg}</React.Fragment>;
+  return <>{svg}</>;
 };

@@ -1,12 +1,13 @@
+import { Sizes } from "@/components/types.d";
 import { CallbackType } from "../Player/types";
 
 export interface SliderProps {
-  sizes: any;
+  sizes: Sizes;
   min: number;
   max: number;
   // connect?: boolean,
   start: number;
-  range?: any;
+  range?: unknown;
   orientation: "vertical" | "horizontal";
   children?: React.ReactFragment;
   view: string;

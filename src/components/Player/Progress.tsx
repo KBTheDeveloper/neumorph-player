@@ -4,7 +4,6 @@ import { Tooltip } from "..";
 import styled from "styled-components";
 import { IProgress } from "./types";
 import { progressStyles } from "./styles/themes";
-import { Howl } from "howler";
 
 const ProgressSC = styled.div((props) => ({
   position: "absolute",
@@ -40,7 +39,7 @@ const step = function (context, element) {
   element.style.width = `${value}%`;
   requestAnimationFrameId = requestAnimationFrame(step.bind(null, context, element));
 };
-let trackIsMounted: null | Howl;
+
 const Progress: React.FunctionComponent<IProgress> = memo((props: IProgress) => {
   const progress = useRef<HTMLDivElement>(null);
   const lineRef = useRef<SVGRectElement | null>(null);
@@ -90,7 +89,7 @@ const Progress: React.FunctionComponent<IProgress> = memo((props: IProgress) => 
     setTooltip((state) => ({ ...state, show: true }));
   }, [tooltip]);
   const onMouseOut = useCallback(() => {
-    if (!trackIsMounted) return;
+    if (!sound) return;
     setTooltip((state) => ({ ...state, show: false }));
   }, [tooltip]);
   useEffect(() => {

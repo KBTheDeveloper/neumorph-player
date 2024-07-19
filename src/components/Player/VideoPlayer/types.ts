@@ -1,8 +1,6 @@
-import { Howl } from "howler";
-
 export interface IVideoPlayer {
   url: string | null;
-  sound: Howl;
+  sound: Record<string, unknown>;
   theme: string;
 }
 

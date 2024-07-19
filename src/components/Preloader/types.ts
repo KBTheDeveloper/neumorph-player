@@ -1,6 +1,8 @@
+import { ReactNode } from "react";
+
 export interface ISpeakerPreloader {
   width: number;
   height: number;
-  children?: JSX.Element | React.ReactFragment;
+  children?: ReactNode;
 }
 export type SVGInHTML = HTMLElement & SVGElement;

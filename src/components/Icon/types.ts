@@ -3,9 +3,9 @@ import { CallbackType } from "../Player/types";
 export type iconWrapperProps = {
   color?: string;
   iconName: string | null;
-  icon?: any;
-  styles?: any;
-  sizes?: any;
+  icon?: unknown;
+  styles?: Record<string, string>;
+  sizes?: Record<string, string>;
   classes?: string;
   noAlign?: boolean;
   tabIndex?: string;
@@ -24,5 +24,5 @@ export type iconProps = {
   height?: string;
   viewBox?: string;
   noAlign?: boolean;
-  icon?: any;
+  icon?: unknown;
 };

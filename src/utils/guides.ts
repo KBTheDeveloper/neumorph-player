@@ -1,4 +1,4 @@
-export const appPalette: any = {
+export const appPalette: { [key: string]: unknown } = {
   orange: "#FF8300",
   orangeRgb: "255,131,0",
   white: "#fff",

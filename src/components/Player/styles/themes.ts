@@ -51,7 +51,7 @@ const genButtonStyles = ({
   defaultButton: TIconBg;
   playButton: TIconBg;
   shadow: string;
-}): any => ({
+}): { [key: string]: unknown } => ({
   playButton: {
     boxShadow: shadow,
     background: playButton.bg,

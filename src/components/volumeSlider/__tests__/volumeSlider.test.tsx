@@ -1,8 +1,9 @@
-import "@testing-library/jest-dom";
 import * as React from "react";
-import { render, waitFor, cleanup } from "@testing-library/react";
-import "../../../../utils/SVGMocks";
+import { render, cleanup } from "@testing-library/react";
+import "@/utils/SVGMocks";
 import RangeSlider from "../";
+import "@testing-library/jest-dom/extend-expect";
+import "@testing-library/jest-dom";
 
 afterEach(cleanup);
 

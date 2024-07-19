@@ -1,10 +1,10 @@
-import React, { RefObject } from "react";
+import React from "react";
 import { mixins } from "../../styles/jss/mixins";
 import { appPalette } from "../../utils/guides";
 import styled from "styled-components";
 import { ButtonProps } from "./types";
 
-const ButtonSC = styled.button((props) => ({
+const ButtonSC = styled.button<any>((props): any => ({
   "&.button": {
     position: "relative",
     border: "1px solid transparent",
@@ -57,7 +57,6 @@ const ButtonSC = styled.button((props) => ({
         boxShadow: "none !important",
       },
     },
-    ...props.styles,
   },
   "&.close-btn--cross": {
     cursor: "pointer",
@@ -119,8 +118,8 @@ const rippleProps = [
   { name: "left", value: "offsetLeft" },
   { name: "top", value: "offsetTop" },
 ];
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const Button = React.forwardRef((props: ButtonProps, ref: RefObject<HTMLButtonElement>) => {
+
+export const Button = React.forwardRef((props: ButtonProps, ref) => {
   const onClick = (e) => {
     if (props.clickHandler) {
       props.clickHandler(e);
@@ -139,11 +138,13 @@ export const Button = React.forwardRef((props: ButtonProps, ref: RefObject<HTMLB
   const cls = props.classes ? `${props.classes.map((item) => item).join(" ")} ` : "";
   const classes = `button ${cls} ${props.view && /fab/.test(props.view) ? `fab ${props.view}` : props.view ? ` ${props.view}` : " "}${props.color ? " " + `button--${props.color}` : ""}${props.visibility ? " visible" : ""}`;
   const buttonTemplate = props.href ? (
-    <a style={{ color: appPalette[props.color] }} href={String(props.href)} className={classes}>
+    <a style={{ color: appPalette[props.color] as string }} href={String(props.href)} className={classes}>
       {props.text}
     </a>
   ) : (
     <ButtonSC
+      as='button'
+      ref={ref}
       tabIndex='0'
       color={props.color}
       disabled={props.disabled}
@@ -162,6 +163,17 @@ export const Button = React.forwardRef((props: ButtonProps, ref: RefObject<HTMLB
       {props.children}
     </ButtonSC>
   );
-  return <React.Fragment>{buttonTemplate}</React.Fragment>;
+  return <>{buttonTemplate}</>;
 });
 Button.displayName = "Button";
+
+function debounce<T extends unknown[]>(func: (...args: T) => void, timeout: number) {
+  let timer;
+  return (...args: T) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => func(...args), timeout);
+  };
+}
+
+const testFunc = debounce((a: string, b: number) => a + b, 1000);
+testFunc("b", 3);

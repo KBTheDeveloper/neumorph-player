@@ -1,7 +1,7 @@
 export interface TooltipProps {
-  text: any;
-  theme: any;
-  position?: any;
+  text: unknown;
+  theme: unknown;
+  position?: unknown;
   dir: string;
   type?: "static" | "dynamic";
   show: boolean;

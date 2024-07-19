@@ -1,5 +1,5 @@
 import { Howl } from "howler";
-import React from "react";
+import { ReactNode } from "react";
 export type CallbackType = (event?) => void;
 type PlayerSettings = {
   volume: number;
@@ -18,7 +18,7 @@ export interface IPlayerMethods {
 }
 
 export interface IProgress {
-  track: any;
+  track: TCurrentTrack;
   theme: string;
   percent: number;
   children?: React.ReactFragment;
@@ -29,7 +29,7 @@ export interface TrackInfoProps {
   artist: string;
   track: Howl | null;
   duration: string;
-  children?: any;
+  children?: ReactNode;
 }
 
 export interface TrackItem extends Omit<IPlayerMethods, "onSkip"> {
@@ -39,7 +39,7 @@ export interface TrackItem extends Omit<IPlayerMethods, "onSkip"> {
     title: string;
     artist: string;
     cover: string;
-    howl: any;
+    howl: Howl;
   };
   theme: string;
   index: number;
@@ -53,7 +53,7 @@ export type TrackType = {
   filename: string;
   artist: string;
   id: number;
-  howl: any;
+  howl: Howl;
   cover: string;
   video?: string;
 };
@@ -62,7 +62,7 @@ export type PlayerProps = {
   tracks: Array<TrackType>;
   position?: "absolute" | "fixed" | "relative";
   theme: string;
-  children?: any;
+  children?: ReactNode;
 };
 
 export type TTooltip = {
@@ -82,12 +82,12 @@ export type TCurrentTrack = {
 
 export type ControlsProps = IPlayerMethods & {
   loading: boolean;
-  items: any[];
+  items: unknown[];
   theme: string;
   playback: string;
-  currentTrackIndex: any;
-  children?: any;
-  videoPlayer?: React.ReactNode | null;
+  currentTrackIndex: unknown;
+  children?: ReactNode;
+  videoPlayer?: ReactNode | null;
 };
 
 export interface IPlaylist extends Omit<IPlayerMethods, "onSkip"> {
@@ -119,5 +119,5 @@ export type VolumeProps = {
   level: number;
   theme: string;
   muted: boolean;
-  children?: any;
+  children?: ReactNode;
 };

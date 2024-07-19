@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, ReactNode } from "react";
 import styled from "styled-components";
 import { Breakpoints } from "./types";
 
@@ -9,7 +9,7 @@ type TGrid = {
   };
   dir?: string;
   wrap?: string;
-  children: any;
+  children: ReactNode;
 };
 const aligns = {
   horizontal: {
@@ -40,7 +40,7 @@ export const breakpoints = {
   lg: "(min-width: 1200px) and (max-width: 1399.98px)",
   xl: "(min-width: 1400px)",
 };
-const createAlignObject = (props: any, axis: string) => {
+const createAlignObject = (props: unknown, axis: string) => {
   const alignObject = { xl: "unset" };
   if (props) {
     Object.entries(props).forEach(([key, value]) => {
@@ -80,7 +80,7 @@ const GridSC = styled.div((props) => {
   ${alignVertMQueries}`;
 });
 
-const Grid: React.FunctionComponent<TGrid> = (props: any) => {
+const Grid: React.FunctionComponent<TGrid> = (props: TGrid) => {
   const classes = "grid";
   const horizontal = props.align?.horizontal || { xl: "offset" };
   const vertical = props.align?.vertical || { xl: "offset" };

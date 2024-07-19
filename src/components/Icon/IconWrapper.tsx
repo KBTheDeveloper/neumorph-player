@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Icon } from "./Icon";
 import { iconWrapperProps } from "./types";
 
-const IconWrapperSC = styled.div((props) => ({
+const IconWrapperSC = styled.div<any>((props) => ({
   display: "flex",
   flexFlow: "row wrap",
   alignItems: "center",
@@ -19,7 +19,7 @@ const IconWrapperSC = styled.div((props) => ({
   }),
 }));
 
-export const IconWrapper: React.FunctionComponent<iconWrapperProps> = function (props: iconWrapperProps) {
+const IconWrapper: React.FunctionComponent<iconWrapperProps> = function (props: iconWrapperProps) {
   const customStyles = props.styles?.name || "";
   const height = props.sizes?.height ?? "25";
   const width = props.sizes?.width ?? "25";
@@ -38,7 +38,7 @@ export const IconWrapper: React.FunctionComponent<iconWrapperProps> = function (
   );
   const classes = props.classes || "";
   return (
-    <React.Fragment>
+    <>
       <IconWrapperSC
         title={props.title}
         role={props.role}
@@ -53,6 +53,10 @@ export const IconWrapper: React.FunctionComponent<iconWrapperProps> = function (
       >
         {icon}
       </IconWrapperSC>
-    </React.Fragment>
+    </>
   );
 };
+
+IconWrapper.displayName = "IconWrapper";
+
+export default IconWrapper;

@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, ReactNode } from "react";
 import styled from "styled-components";
 import { breakpoints, gridOptions } from "./Grid";
 import { Breakpoints } from "./types";
@@ -11,8 +11,8 @@ type TColumn = {
   offset?: Breakpoints;
   order?: Breakpoints;
   classes?: string;
-  children?: any;
-  style?: any;
+  children?: ReactNode;
+  style?: unknown;
 };
 const calcColsInPercents = (size) => `${(+size / 12) * 100}%`;
 
@@ -80,7 +80,7 @@ const Column: React.FunctionComponent<TColumn> = (props: TColumn) => {
   const colOffset = props.offset;
   const colOrder = props.order;
   return (
-    <React.Fragment>
+    <>
       <ColumnSC
         style={props.style}
         colOffset={colOffset}
@@ -91,7 +91,7 @@ const Column: React.FunctionComponent<TColumn> = (props: TColumn) => {
       >
         {props.children}
       </ColumnSC>
-    </React.Fragment>
+    </>
   );
 };
 

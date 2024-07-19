@@ -10,7 +10,7 @@ const thumbSizes = {
   height: 20,
 };
 
-const RangeSliderSC = styled.div((props) => ({
+const RangeSliderSC = styled.div<any>((props: any): any => ({
   "&.range-slider": {
     position: "relative",
     ...mixins.neuMorphismShadow("4px 4px 8px rgba(0, 0, 0, 0.25)", "-4px -4px 8px rgba(255, 255, 255, 0.03)"),
@@ -104,6 +104,7 @@ const RangeSlider: React.FunctionComponent<SliderProps> = React.memo((props: Sli
   const [percent, setPercent] = React.useState(0);
 
   const defaultParams = {
+    // TO-DO: fix props.sizes types
     width: props.sizes ? props.sizes.width : 200,
     height: props.sizes?.height || "100%",
     orientation: props.orientation ?? "horizontal",
@@ -206,6 +207,7 @@ const RangeSlider: React.FunctionComponent<SliderProps> = React.memo((props: Sli
   const processLineFill = props.orientation === "horizontal" ? { width: `${percent}%` } : { height: `${percent}%` };
   return (
     <RangeSliderSC
+      as='div'
       data-testid='range-slider'
       tabIndex='0'
       onKeyDown={onKeyDown}

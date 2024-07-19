@@ -8,7 +8,13 @@ export function formatTime(secs: number) {
   return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
 }
 
-export function setElementPosition(parent: HTMLElement | Element, child: HTMLElement, opts: any): void {
+export function setElementPosition(
+  parent: HTMLElement | Element,
+  child: HTMLElement,
+  opts: {
+    [key: string]: number;
+  },
+): void {
   const coords = parent.getBoundingClientRect();
   let top, left;
   top = coords.top - child.offsetHeight - opts.margin;
@@ -53,17 +59,7 @@ export function formatBytes(bytes, decimals = 2) {
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
 }
 
-export function debounce(func, timeout = 300) {
-  let timer;
-  return (...args: any) => {
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-      func.apply(this, args);
-    }, timeout);
-  };
-}
-
-export const lazy = (componentImportFn: any) =>
+export const lazy = (componentImportFn) =>
   React.lazy(async () => {
     const obj = await componentImportFn();
     return typeof obj.default === "function" ? obj : obj.default;
